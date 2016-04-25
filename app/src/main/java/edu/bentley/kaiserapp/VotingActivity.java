@@ -26,20 +26,39 @@ public class VotingActivity extends AppCompatActivity {
 
     private String phoneNumber;
     private TextView tv1, tv2, tv3;
+    private String flavorVote;
 
     private View.OnClickListener votingListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            flavorVote = ((TextView)v).getText().toString();
             Thread t = new Thread(voteTask);
             t.start();
         }
     };
 
-    private Handler handler = new Handler() {
+    private Handler checkHandler = new Handler() {
         public void handleMessage(Message message) {
             Log.d(votingTag, "Handler speaking");
             boolean flag = (Boolean)message.obj;
-            if(!flag)
+            if(flag) {
+                Thread t = new Thread(placeVote);
+                t.start();
+            }
+            else
+                startActivity(new Intent(getApplicationContext(), VotingErrorActivity.class));
+        }
+    };
+
+    private Handler voteHandler = new Handler() {
+        public void handleMessage(Message message) {
+            Log.d(votingTag, "Handler speaking");
+            boolean flag = (Boolean)message.obj;
+            if(flag) {
+                Thread t = new Thread(placeVote);
+                t.start();
+            }
+            else
                 startActivity(new Intent(getApplicationContext(), VotingErrorActivity.class));
         }
     };
@@ -143,7 +162,43 @@ public class VotingActivity extends AppCompatActivity {
 
                 Message msg = new Message();
                 msg.obj = flag;
-                handler.sendMessage(msg);
+                checkHandler.sendMessage(msg);
+                con.close();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private Runnable placeVote = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(votingTag, "Clicked a Flavor");
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
+            String username = "jkleppinger";
+            String password = "icecream";
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+
+            Statement stmt;
+            Connection con;
+            try {
+                con = DriverManager.getConnection (URL, username, password);
+
+                PreparedStatement preStmt = con.prepareStatement("INSERT INTO tblVote VALUES(?, ?, ?);");
+                preStmt.setString(1, phoneNumber);
+                preStmt.setString(2, flavorVote);
+                preStmt.setDate(3, new Date(Calendar.getInstance().getTimeInMillis()));
+                preStmt.executeUpdate();
+
+                Message msg = new Message();
+                msg.obj = "Sending";
+                voteHandler.sendMessage(msg);
                 con.close();
             }
             catch (SQLException e) {
