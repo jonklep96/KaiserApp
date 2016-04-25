@@ -10,7 +10,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,11 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
 
     private String WEATHER_KEY;
 
+    /**
+     * Variables to store the location of the store.
+     * This will be used to find the store in Google Maps
+     * and the weather API.
+     */
     private final String STORE_NAME = "Kaiserstühler Landeis";
     private final String STORE_ADDRESS = "Untere Guldenstraße 10, Königschaffhausen 79346 Endingen am Kaiserstuhl, Freiburg, Baden-Württemberg, Germany";
     private LatLng storeLatLng;
@@ -85,6 +92,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             public void handleMessage(Message message) {
                 Weather _weather = (Weather)message.obj;
 
+                findViewById(R.id.pb_weather_widget).setVisibility(View.INVISIBLE);
                 ((TextView)findViewById(R.id.tv_cur_temp)).setText(String.format("%.0f",_weather.getCurrentTemperature()));
                 ((TextView)findViewById(R.id.tv_high_temp)).setText(String.format("%.0f",_weather.getHighTemperature()));
                 ((TextView)findViewById(R.id.tv_low_temp)).setText(String.format("%.0f",_weather.getLowTemperature()));

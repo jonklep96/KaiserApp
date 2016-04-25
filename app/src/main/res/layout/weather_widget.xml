@@ -3,6 +3,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/weather_widget_margin">
+    <ProgressBar android:id="@+id/pb_weather_widget"
+        android:layout_width="@dimen/iv_width_and_height"
+        android:layout_height="@dimen/iv_width_and_height"
+        android:layout_margin="@dimen/iv_weather_margin"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_centerInParent="true" />
     <ImageView android:id="@+id/iv_weather"
         android:layout_width="@dimen/iv_width_and_height"
         android:layout_height="@dimen/iv_width_and_height"

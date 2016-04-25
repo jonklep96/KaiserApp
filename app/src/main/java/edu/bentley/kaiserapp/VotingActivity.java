@@ -29,6 +29,10 @@ public class VotingActivity extends AppCompatActivity {
     private Button tv1, tv2, tv3;
     private String flavorVote;
 
+    /**
+     * Reacts to when a button is clicked
+     * to choose what flavor to vote for.
+     */
     private View.OnClickListener votingListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -38,9 +42,13 @@ public class VotingActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Tells whether or not the user
+     * has already voted in that month.
+     */
     private Handler checkHandler = new Handler() {
         public void handleMessage(Message message) {
-            Log.d(votingTag, "Handler speaking");
+            Log.d(votingTag, "checkHandler");
             boolean flag = (Boolean)message.obj;
             if(flag) {
                 Thread t = new Thread(placeVote);
@@ -53,7 +61,6 @@ public class VotingActivity extends AppCompatActivity {
 
     private Handler voteHandler = new Handler() {
         public void handleMessage(Message message) {
-            Log.d(votingTag, "Handler speaking");
             Log.d(votingTag, "voteHandler");
 
             Thread t = new Thread(displayData);
@@ -66,10 +73,14 @@ public class VotingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting);
 
+        /**
+         * Grab the cellphone's telephone number.
+         * This will be sued to identify the previous
+         * votes that are stored in the database.
+         */
         TelephonyManager phoneManager = (TelephonyManager)
                 getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        //phoneNumber = phoneManager.getLine1Number();
-        phoneNumber = "6107371722";
+        phoneNumber = phoneManager.getLine1Number();
 
         tv1 = (Button)findViewById(R.id.voting_tv1);
         tv1.setOnClickListener(votingListener);
@@ -101,12 +112,12 @@ public class VotingActivity extends AppCompatActivity {
                 stmt = con.createStatement();
 
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblVote;");
-                stmt.executeUpdate("CREATE TABLE tblVote(phone_number VARCHAR(11), flavor VARCHAR(25), date DATE);");
+                stmt.executeUpdate("CREATE TABLE tblVote(phone_number VARCHAR(14), flavor VARCHAR(25), date DATE);");
                 Log.w(votingTag, "Created Table");
 
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('6107371722', 'Vanilla', '2016-01-26');");
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('6107371722', 'Chocolate', '2016-02-26');");
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('6107371722', 'Strawberry', '2016-03-26');");
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Vanilla', '2016-01-26');");
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Chocolate', '2016-02-26');");
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Strawberry', '2016-03-26');");
 
                 con.close();
             }
