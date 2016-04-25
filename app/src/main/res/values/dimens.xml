@@ -19,5 +19,6 @@
 
     <!-- Voting Activity Values -->
     <dimen name="tv_voting_textsize">30sp</dimen>
-    <dimen name="tv_voting_margin">15dp</dimen>
+    <dimen name="tv_voting_padding">8dp</dimen>
+    <dimen name="tv_voting_margin">45dp</dimen>
 </resources>

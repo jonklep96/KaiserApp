@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.sql.Connection;
@@ -19,28 +21,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class VotingActivity extends AppCompatActivity {
 
     private final String votingTag = "VotingActivity";
 
+    /**
+     * Variables that sotre the information to access
+     * the Bentley Frodo database.
+     */
+    private final String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
+    private final String username = "jkleppinger";
+    private final String password = "icecream";
+
     private String phoneNumber;
     private Button tv1, tv2, tv3;
     private String flavorVote;
 
-    /**
-     * Reacts to when a button is clicked
-     * to choose what flavor to vote for.
-     */
-    private View.OnClickListener votingListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            flavorVote = ((TextView)v).getText().toString();
-            Thread t = new Thread(voteTask);
-            t.start();
-        }
-    };
+    private ArrayList<String> choiceList;
+    private ArrayAdapter<String> adapter;
+    private ListView listView;
 
     /**
      * Tells whether or not the user
@@ -68,6 +70,13 @@ public class VotingActivity extends AppCompatActivity {
         }
     };
 
+    private Handler flavorHandler = new Handler() {
+        public void handleMessage(Message message) {
+            ArrayList<String> list = (ArrayList<String>)message.obj;
+            adapter.notifyDataSetChanged();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,24 +91,39 @@ public class VotingActivity extends AppCompatActivity {
                 getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         phoneNumber = phoneManager.getLine1Number();
 
-        tv1 = (Button)findViewById(R.id.voting_tv1);
-        tv1.setOnClickListener(votingListener);
-        tv2 = (Button)findViewById(R.id.voting_tv2);
-        tv2.setOnClickListener(votingListener);
-        tv3 = (Button)findViewById(R.id.voting_tv3);
-        tv3.setOnClickListener(votingListener);
+        /**
+         * Building the ListView object to help the user
+         * select what flavor they want to see on the
+         * menu next month.
+         */
+        choiceList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, R.layout.choice_item, choiceList);
+        listView = (ListView)findViewById(android.R.id.list);
+        listView.setAdapter(adapter);
+
+        /**
+         * Reacts to when a button is clicked
+         * to choose what flavor to vote for.
+         */
+        listView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flavorVote = ((TextView)v).getText().toString();
+                Thread t = new Thread(voteTask);
+                t.start();
+            }
+        });
 
         Thread t = new Thread(createVoteTable);
         t.start();
+        Thread t2 = new Thread(votableFlavors);
+        t2.start();
+        Thread t3 = new Thread(getVotableFlavors);
+        t3.start();
     }
 
     private Runnable createVoteTable = new Runnable() {
-        public void run(){
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
-
-            try {
+        public void run(){try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
                 Log.e("JDBC", "Did not load driver");
@@ -130,10 +154,6 @@ public class VotingActivity extends AppCompatActivity {
     private Runnable voteTask = new Runnable() {
         public void run(){
             Log.d(votingTag, "Clicked a Flavor");
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
-
             try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
@@ -144,14 +164,8 @@ public class VotingActivity extends AppCompatActivity {
             Connection con;
             try {
                 con = DriverManager.getConnection (URL, username, password);
-
-                /*PreparedStatement preStmt = con.prepareStatement("SELECT phone_number, timestamp FROM tblVote" +
-                        "WHERE phone_number = ?");
-                preStmt.setString(1, phoneNumber);
-
-                ResultSet result = preStmt.executeQuery();*/
-
                 stmt = con.createStatement();
+
                 ResultSet result = stmt.executeQuery("SELECT phone_number, date FROM tblVote");
 
                 Calendar c = Calendar.getInstance();
@@ -185,9 +199,6 @@ public class VotingActivity extends AppCompatActivity {
         @Override
         public void run() {
             Log.d(votingTag, "Clicked a Flavor");
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
 
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -220,10 +231,6 @@ public class VotingActivity extends AppCompatActivity {
     private Runnable displayData = new Runnable() {
         @Override
         public void run() {
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
-
             try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
@@ -243,6 +250,72 @@ public class VotingActivity extends AppCompatActivity {
                     Date date = result.getDate("date");
                     Log.d(votingTag, phone + ": " + flavor + " on " + date.toString());
                 }
+
+                con.close();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private Runnable votableFlavors = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+
+            Statement stmt;
+            Connection con;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+
+                stmt.executeUpdate("DROP TABLE IF EXISTS tblVotableFlavors;");
+                stmt.executeUpdate("CREATE TABLE tblVotableFlavors(flavor VARCHAR(25), date DATE);");
+                Log.w(votingTag, "Created Table");
+
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Vanilla', '2016-04-01');");
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Chocolate', '2016-04-01');");
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Strawberry', '2016-04-01');");
+
+                con.close();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private Runnable getVotableFlavors = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+
+            Connection con;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+
+                PreparedStatement preStmt = con.prepareStatement("SELECT flavor FROM tblVotableFlavors" +
+                        "WHERE MONTH(date) = ? AND YEAR(date) = ?;");
+                preStmt.setInt(1, (new Date(Calendar.getInstance().getTimeInMillis())).getMonth());
+                preStmt.setInt(2, (new Date(Calendar.getInstance().getTimeInMillis())).getYear());
+                ResultSet results = preStmt.executeQuery();
+
+                ArrayList<String> flavorList = new ArrayList<>();
+                while(results.next())
+                    flavorList.add(results.getString("flavor"));
+
+                Message msg = new Message();
+                msg.obj = flavorList;
+                flavorHandler.sendMessage(msg);
 
                 con.close();
             }

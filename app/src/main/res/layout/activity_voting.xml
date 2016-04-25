@@ -10,20 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".VotingActivity">
 
-    <Button android:id="@+id/voting_tv1"
+    <ListView android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/VotingButton"
-        android:text="temp1"/>
-    <Button android:id="@+id/voting_tv2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/VotingButton"
-        android:text="temp2" />
-    <Button android:id="@+id/voting_tv3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/VotingButton"
-        android:text="temp3" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

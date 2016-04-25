@@ -11,6 +11,8 @@
     <style name="VotingButton" parent="AppTheme">
         <item name="android:background">@color/tv_voting</item>
         <item name="android:textSize">@dimen/tv_voting_textsize</item>
+        <item name="android:padding">@dimen/tv_voting_padding</item>
+        <item name="android:layout_marginTop">@dimen/tv_voting_margin</item>
         <item name="android:layout_marginBottom">@dimen/tv_voting_margin</item>
     </style>
 </resources>
