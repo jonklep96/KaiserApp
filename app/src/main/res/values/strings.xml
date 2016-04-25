@@ -2,4 +2,7 @@
     <string name="app_name">Kaiserstühler Landeis</string>
     <string name="title_activity_contact">Contact</string>
     <string name="store_address">79346 Endingen-Königschaffhausen\nUntere Guldenstr. 10</string>
+
+    <string name="voting_error_message">Thanks for voting, but you have already voted this month. Try again next month.</string>
+    <string name="btn_voting_home">Go to Home Screen</string>
 </resources>
