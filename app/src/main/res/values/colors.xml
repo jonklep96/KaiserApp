@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FAAEAE</color>
-    <color name="colorPrimaryDark">#FFCCCC</color>
-    <color name="colorAccent">#FFDDDD</color>
+    <color name="colorPrimary">#FFFAAEAE</color>
+    <color name="colorPrimaryDark">#FFFFCCCC</color>
+    <color name="colorAccent">#FFFFDDDD</color>
+
+    <!-- Colors for Voting Activity -->
+    <color name="tv_voting">#FFFFBBAA</color>
 </resources>
