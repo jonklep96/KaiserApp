@@ -10,17 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".VotingActivity">
 
-    <TextView android:id="@+id/voting_tv1"
+    <Button android:id="@+id/voting_tv1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/VotingButton" />
-    <TextView android:id="@+id/voting_tv2"
+        style="@style/VotingButton"
+        android:text="temp1"/>
+    <Button android:id="@+id/voting_tv2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/VotingButton" />
-    <TextView android:id="@+id/voting_tv3"
+        style="@style/VotingButton"
+        android:text="temp2" />
+    <Button android:id="@+id/voting_tv3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/VotingButton" />
+        style="@style/VotingButton"
+        android:text="temp3" />
 
 </LinearLayout>
