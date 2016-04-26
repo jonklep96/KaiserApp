@@ -21,7 +21,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/activity_developer" />
+    <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/vf"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- <include android:id="@+id/include_start" layout="@layout/activity_start" /> debug-->
+        <include android:id="@+id/include_flavors" layout="@layout/activity_flavors" />
+        <include android:id="@+id/include_voting" layout="@layout/activity_voting" />
+        <include android:id="@+id/include_developer" layout="@layout/activity_developer" />
+        <include android:id="@+id/include_map" layout="@layout/activity_contact" />
+        <!--<include android:id="@+id/include_sched" layout="@layout/activity_voting" /> debug-->
+        <!--<include android:id="@+id/include_contact" layout="@layout/activity_developer" /> debug-->
+    </ViewFlipper>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

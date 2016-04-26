@@ -17,13 +17,17 @@ public class DeveloperActivity extends DrawerActivity {
 
     private final String DEV_TAG = "DeveloperActivity";
 
+    public final static String NAME = "developer";
+
     Button btnCreateFlavorsTable, btnCreateVotingTable, btnVotableFlavorsTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        savedInstanceState.putString(ACTIVITY_KEY, "developer");
+        if (savedInstanceState == null)
+            savedInstanceState = new Bundle();
+        savedInstanceState.putString(ACTIVITY_KEY, NAME);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_developer);
 
         btnCreateFlavorsTable = (Button)findViewById(R.id.dev_create_flavors_table);
         btnCreateFlavorsTable.setOnClickListener(new View.OnClickListener() {

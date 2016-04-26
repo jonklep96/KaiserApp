@@ -23,6 +23,8 @@ public class FlavorsActivity extends DrawerActivity {
 
     private final String flavorTag = "FlavorsActivity";
 
+    public final static String NAME = "flavors";
+
     private ArrayAdapter<String> adapter;
     private ArrayList<String> flavorsList;
 
@@ -36,8 +38,11 @@ public class FlavorsActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null)
+            savedInstanceState = new Bundle();
+        savedInstanceState.putString(ACTIVITY_KEY, NAME);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_flavors);
 
         //flavorsList = readFlavorList();
         flavorsList = new ArrayList<>();

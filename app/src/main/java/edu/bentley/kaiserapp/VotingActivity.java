@@ -32,6 +32,8 @@ public class VotingActivity extends DrawerActivity {
 
     private static final String VOTING_TAG = "VotingActivity";
 
+    public final static String NAME = "voting";
+
     /**
      * The user's phone number and the flavor
      * that they choose.
@@ -49,8 +51,11 @@ public class VotingActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null)
+            savedInstanceState = new Bundle();
+        savedInstanceState.putString(ACTIVITY_KEY, NAME);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_voting);
 
         /**
          * Grab the cellphone's telephone number.

@@ -41,6 +41,8 @@ import edu.bentley.kaiserapp.R;
 
 public class ContactActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    public final static String NAME = "map";
+
     private GoogleMap mMap;
 
     private String WEATHER_KEY;

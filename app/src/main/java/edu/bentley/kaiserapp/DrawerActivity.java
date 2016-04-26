@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ViewFlipper;
+
 import edu.bentley.kaiserapp.contact.*;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,12 +33,25 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     public final static String USERNAME = "jkleppinger";
     public final static String PASSWORD = "icecream";
 
+    /**
+     * Use a ViewFlipper to change the content inside of the
+     * application.
+     */
+    ViewFlipper vf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if (getSupportActionBar() == null)
+            setSupportActionBar(toolbar);
+
+        vf = (ViewFlipper)findViewById(R.id.vf);
+        if (savedInstanceState != null)
+            setViewFlipperContent(savedInstanceState.getString(ACTIVITY_KEY));
+        else
+            vf.setDisplayedChild(2);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -114,5 +129,17 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setViewFlipperContent(String activityName) {
+        if (activityName == null)
+            vf.setDisplayedChild(2);
+        switch (activityName) {
+            //case StartActivity.NAME: break;
+            case FlavorsActivity.NAME: vf.setDisplayedChild(0); break;
+            case VotingActivity.NAME: vf.setDisplayedChild(1); break;
+            case DeveloperActivity.NAME: vf.setDisplayedChild(2); break;
+            case ContactActivity.NAME: vf.setDisplayedChild(3); break;
+        }
     }
 }
