@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class FlavorsActivity extends AppCompatActivity {
+public class FlavorsActivity extends DrawerActivity {
 
     private final String flavorTag = "FlavorsActivity";
 
@@ -75,46 +75,8 @@ public class FlavorsActivity extends AppCompatActivity {
         return toReturn;
     }
 
-    private Runnable insertFlavors = new Runnable() {
-        public void run(){
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
-            }
-
-            Statement stmt;
-            Connection con;
-            try {
-                con = DriverManager.getConnection(URL, username, password);
-                stmt = con.createStatement();
-
-                stmt.executeUpdate("DROP TABLE IF EXISTS tblFlavors;");
-                stmt.executeUpdate("CREATE TABLE tblFlavors(id integer primary key, flavor varchar(25));");
-
-                stmt.executeUpdate("insert into tblFlavors values(1, 'Vanilla');");
-                stmt.executeUpdate("insert into tblFlavors values(2, 'Chocolate');");
-                stmt.executeUpdate("insert into tblFlavors values(3, 'Strawberry');");
-
-                con.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
     private Runnable grabFlavors = new Runnable() {
-        public void run(){
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
-            String username = "jkleppinger";
-            String password = "icecream";
-
-            try {
+        public void run(){try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
                 Log.e("JDBC", "Did not load driver");
@@ -123,7 +85,7 @@ public class FlavorsActivity extends AppCompatActivity {
             Statement stmt;
             Connection con;
             try {
-                con = DriverManager.getConnection (URL, username, password);
+                con = DriverManager.getConnection (URL, USERNAME, PASSWORD);
                 stmt = con.createStatement();
 
                 ResultSet result = stmt.executeQuery(

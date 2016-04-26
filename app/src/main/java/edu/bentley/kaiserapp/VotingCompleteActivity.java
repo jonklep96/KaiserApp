@@ -1,5 +1,6 @@
 package edu.bentley.kaiserapp;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class VotingCompleteActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class VotingCompleteActivity extends DrawerActivity implements TextToSpeech.OnInitListener {
 
     /**
      * Include the TTS engine that will be used when the
@@ -23,6 +24,10 @@ public class VotingCompleteActivity extends AppCompatActivity implements TextToS
         setContentView(R.layout.activity_voting_complete);
 
         speaker = new TextToSpeech(this, this);
+
+        //Clearing the notification
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(getIntent().getIntExtra("NotificationId", 0));
 
         String output = "You have successfully voted for " + getIntent().getStringExtra(LoadingActivity.FLAVOR_KEY) + ".";
         ((TextView)findViewById(R.id.tv_voting_complete)).setText(output);

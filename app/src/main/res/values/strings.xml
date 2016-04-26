@@ -31,8 +31,11 @@
     <string name="loading">Loading&#8230;</string>
     <string name="title_activity_drawer">DrawerActivity</string>
 
+    <!-- Navigation Drawer Information -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="email_address">info@kaisterstuehlerlandeis.de</string>
 
+    <!-- Option Menu List -->
     <string name="action_settings">Settings</string>
 </resources>

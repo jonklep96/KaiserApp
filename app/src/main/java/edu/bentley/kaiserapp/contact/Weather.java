@@ -1,4 +1,4 @@
-package edu.bentley.kaiserapp;
+package edu.bentley.kaiserapp.contact;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

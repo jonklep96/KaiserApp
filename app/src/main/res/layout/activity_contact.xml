@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".ContactActivity">
+        tools:context=".contact.ContactActivity">
 
         <include layout="@layout/weather_widget" />
 

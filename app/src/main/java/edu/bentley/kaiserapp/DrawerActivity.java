@@ -1,5 +1,6 @@
 package edu.bentley.kaiserapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import edu.bentley.kaiserapp.contact.*;
 
-public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    /**
+     * Stores a String to serve as a key so the
+     * child Activity can be identified.
+     */
+    public final static String ACTIVITY_KEY = "activity";
+
+    /**
+     * Variables that store the information to access
+     * the Bentley Frodo database.
+     */
+    public final static String URL = "jdbc:mysql://frodo.bentley.edu:3306/cs480icecream";
+    public final static String USERNAME = "jkleppinger";
+    public final static String PASSWORD = "icecream";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +93,22 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_start: break;
+            case R.id.nav_flavors:
+                startActivity(new Intent(this, FlavorsActivity.class));
+                break;
+            case R.id.nav_voting:
+                startActivity(new Intent(this, VotingActivity.class));
+                break;
+            case R.id.nav_developer:
+                startActivity(new Intent(this, DeveloperActivity.class));
+                break;
+            case R.id.nav_map:
+                startActivity(new Intent(this, ContactActivity.class));
+                break;
+            case R.id.nav_sched: break;
+            case R.id.nav_contact: break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

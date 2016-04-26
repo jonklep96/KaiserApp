@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
-public class VotingErrorActivity extends AppCompatActivity {
+import edu.bentley.kaiserapp.contact.ContactActivity;
+
+public class VotingErrorActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
