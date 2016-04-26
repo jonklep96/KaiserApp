@@ -1,4 +1,4 @@
-package edu.bentley.kaiserapp;
+package edu.bentley.kaiserapp.voting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.StringTokenizer;
+
+import edu.bentley.kaiserapp.DrawerActivity;
+import edu.bentley.kaiserapp.LoadingActivity;
+import edu.bentley.kaiserapp.R;
 
 public class VotingActivity extends DrawerActivity {
 

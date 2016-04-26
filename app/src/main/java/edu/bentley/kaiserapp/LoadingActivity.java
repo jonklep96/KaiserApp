@@ -20,6 +20,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import edu.bentley.kaiserapp.voting.VotingCompleteActivity;
+import edu.bentley.kaiserapp.voting.VotingErrorActivity;
+
 public class LoadingActivity extends AppCompatActivity {
 
     private final String LOADING_TAG = "LoadingActivity";

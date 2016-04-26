@@ -42,10 +42,10 @@
         </activity>
         <activity android:name=".FlavorsActivity" />
         <activity android:name=".contact.ContactActivity" />
-        <activity android:name=".VotingActivity" />
-        <activity android:name=".VotingErrorActivity" />
+        <activity android:name=".voting.VotingActivity" />
+        <activity android:name=".voting.VotingErrorActivity" />
         <activity android:name=".LoadingActivity" />
-        <activity android:name=".VotingCompleteActivity" />
+        <activity android:name=".voting.VotingCompleteActivity" />
         <activity android:name=".DeveloperActivity" />
     </application>
 

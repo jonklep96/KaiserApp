@@ -35,6 +35,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="email_address">info@kaisterstuehlerlandeis.de</string>
+    <string name="phone_number">+49 (0 76 42) 33 77</string>
 
     <!-- Option Menu List -->
     <string name="action_settings">Settings</string>

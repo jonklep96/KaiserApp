@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.bentley.kaiserapp.VotingCompleteActivity">
+    tools:context=".voting.VotingCompleteActivity">
 
     <TextView android:id="@+id/tv_voting_complete"
         android:layout_width="wrap_content"

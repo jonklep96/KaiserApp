@@ -1,10 +1,12 @@
-package edu.bentley.kaiserapp;
+package edu.bentley.kaiserapp.voting;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import edu.bentley.kaiserapp.DrawerActivity;
+import edu.bentley.kaiserapp.R;
 import edu.bentley.kaiserapp.contact.ContactActivity;
 
 public class VotingErrorActivity extends DrawerActivity {

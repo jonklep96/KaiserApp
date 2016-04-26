@@ -1,6 +1,7 @@
 package edu.bentley.kaiserapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import edu.bentley.kaiserapp.contact.*;
+import edu.bentley.kaiserapp.voting.VotingActivity;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,24 +46,24 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        /**
+         * Creates a Toolbar on the first creation of the application.
+         */
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         if (getSupportActionBar() == null)
             setSupportActionBar(toolbar);
 
+        /**
+         * Find the ViewFlipper which will allow the
+         * application to set the content on each page to
+         * an activity layout.
+         */
         vf = (ViewFlipper)findViewById(R.id.vf);
         if (savedInstanceState != null)
             setViewFlipperContent(savedInstanceState.getString(ACTIVITY_KEY));
         else
             vf.setDisplayedChild(2);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -68,7 +71,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -86,6 +89,26 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.drawer, menu);
+
+        TextView header_phone = (TextView)findViewById(R.id.header_phone);
+        header_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.phone_number))));
+            }
+        });
+        TextView header_email = (TextView)findViewById(R.id.header_email);
+        header_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent msg = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+                msg.putExtra(Intent.EXTRA_EMAIL, new String[] {getResources().getString(R.string.email_address)});
+                if (msg.resolveActivity(getPackageManager()) != null) {
+                    startActivity(msg);
+                }
+            }
+        });
+
         return true;
     }
 

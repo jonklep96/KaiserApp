@@ -1,5 +1,7 @@
 package edu.bentley.kaiserapp;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
@@ -19,7 +21,14 @@ public class DeveloperActivity extends DrawerActivity {
 
     public final static String NAME = "developer";
 
-    Button btnCreateFlavorsTable, btnCreateVotingTable, btnVotableFlavorsTable;
+    private Button btnCreateFlavorsTable, btnCreateVotingTable, btnVotableFlavorsTable;
+
+    private Handler handler = new Handler() {
+        public void handleMessage(Message message) {
+            Log.d(DEV_TAG, (String)message.obj);
+            Toast.makeText(getApplicationContext(), (String)message.obj, Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +90,10 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("insert into tblFlavors values(3, 'Strawberry');");
 
                 con.close();
-                Log.d(DEV_TAG, "Created tblFlavors");
-                Toast.makeText(getApplicationContext(), "Created tblFlavors", Toast.LENGTH_SHORT).show();
+
+                Message msg = new Message();
+                msg.obj = "Created tblFlavors";
+                handler.sendMessage(msg);
             }
             catch (SQLException e) {
                 e.printStackTrace();
@@ -115,8 +126,10 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Strawberry', '2016-03-26');");
 
                 con.close();
-                Log.d(DEV_TAG, "Created tblVote");
-                Toast.makeText(getApplicationContext(), "Created tblVote", Toast.LENGTH_SHORT).show();
+
+                Message msg = new Message();
+                msg.obj = "Created tblVote";
+                handler.sendMessage(msg);
             }
             catch (SQLException e) {
                 e.printStackTrace();
@@ -152,8 +165,10 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Strawberry', '2016-04-01');");
 
                 con.close();
-                Log.d(DEV_TAG, "Created tblVotableFlavors");
-                Toast.makeText(getApplicationContext(), "Created tblVotableFlavors", Toast.LENGTH_SHORT).show();
+
+                Message msg = new Message();
+                msg.obj = "Created tblVotableFlavors";
+                handler.sendMessage(msg);
             }
             catch (SQLException e) {
                 e.printStackTrace();

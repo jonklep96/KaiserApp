@@ -1,14 +1,18 @@
-package edu.bentley.kaiserapp;
+package edu.bentley.kaiserapp.voting;
 
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import java.util.Locale;
+
+import edu.bentley.kaiserapp.DrawerActivity;
+import edu.bentley.kaiserapp.LoadingActivity;
+import edu.bentley.kaiserapp.R;
+import edu.bentley.kaiserapp.voting.VotingActivity;
 
 public class VotingCompleteActivity extends DrawerActivity implements TextToSpeech.OnInitListener {
 
