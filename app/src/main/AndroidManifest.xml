@@ -31,8 +31,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".DrawerActivity"
-            android:label="@string/title_activity_drawer"
+            android:name=".DeveloperActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +45,7 @@
         <activity android:name=".voting.VotingErrorActivity" />
         <activity android:name=".LoadingActivity" />
         <activity android:name=".voting.VotingCompleteActivity" />
-        <activity android:name=".DeveloperActivity" />
+        <activity android:name=".DrawerActivity" />
     </application>
 
 </manifest>

@@ -37,6 +37,11 @@ public class DeveloperActivity extends DrawerActivity {
         savedInstanceState.putString(ACTIVITY_KEY, NAME);
 
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         btnCreateFlavorsTable = (Button)findViewById(R.id.dev_create_flavors_table);
         btnCreateFlavorsTable.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +111,12 @@ public class DeveloperActivity extends DrawerActivity {
      * table to input votes from app users.
      */
     private Runnable createVoteTable = new Runnable() {
-        public void run(){try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            Log.e("JDBC", "Did not load driver");
-        }
+        public void run(){
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
 
             Statement stmt;
             Connection con;

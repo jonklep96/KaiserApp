@@ -7,34 +7,46 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class FlavorsActivity extends DrawerActivity {
 
-    private final String flavorTag = "FlavorsActivity";
+    /**
+     * Tag for the Log in the FlavorsActivity
+     */
+    private final String FLAVOR_TAG = "FlavorsActivity";
 
+    /**
+     * The name of the Activity so the DrawerActivity
+     * can change the content view.
+     */
     public final static String NAME = "flavors";
 
+    /**
+     * List objects to display the list of the flavors
+     * available at the store.
+     */
     private ArrayAdapter<String> adapter;
     private ArrayList<String> flavorsList;
 
-    private final String userFlavorsFile = "user_flavors.txt";
-
-    private Handler handler = new Handler() {
-        public void handleMessage(Message message) {
-            adapter.notifyDataSetChanged();
-        }
-    };
+    /**
+     * The text file that will store the flavors
+     * that are downloaded from Frodo.
+     */
+    private final static String FILE_NAME = "user_flavors.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +56,13 @@ public class FlavorsActivity extends DrawerActivity {
 
         super.onCreate(savedInstanceState);
 
-        //flavorsList = readFlavorList();
-        flavorsList = new ArrayList<>();
-        //Thread t = new Thread(insertFlavors);
-        Thread t = new Thread(grabFlavors);
+        try {
+            flavorsList = readList();
+        } catch (IOException e) {
+            flavorsList = new ArrayList<>();
+        }
+
+        Thread t = new Thread(createList);
         t.start();
 
         ListView listView = (ListView)findViewById(android.R.id.list);
@@ -55,16 +70,44 @@ public class FlavorsActivity extends DrawerActivity {
         listView.setAdapter(adapter);
     }
 
-    public ArrayList<String> readFlavorList() {
+    /**
+     * Saves the list in a text file.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveList();
+    }
+
+    /**
+     * Saves the data from the list by writing each
+     * flavor from the list to a file.
+     */
+    private void saveList() {
+        try {
+            OutputStreamWriter output = new OutputStreamWriter(openFileOutput(FILE_NAME, MODE_PRIVATE));
+            for (String e : flavorsList) {
+                output.write(e + "\n");
+            }
+            output.close();
+        } catch (IOException e) {
+            Log.e(FLAVOR_TAG, "Error during save");
+        }
+    }
+
+    /**
+     * Reads the list from the file if the data has already
+     * been accessed from the database before.
+     */
+    public ArrayList<String> readList() throws IOException {
         ArrayList<String> toReturn = new ArrayList<>();
         try {
             InputStream in;
 
-            // Will open up a user specific file if it exists
             try {
-                in = openFileInput(userFlavorsFile);
+                in = openFileInput(FILE_NAME);
             } catch (IOException e) {
-                Log.d(flavorTag, "IOException: user_flavors.txt does not exist");
+                Log.d(FLAVOR_TAG, "IOException: user_flavors.txt does not exist");
                 in = getResources().openRawResource(R.raw.flavors);
             }
 
@@ -75,12 +118,17 @@ public class FlavorsActivity extends DrawerActivity {
             while ((line = reader.readLine()) != null) { toReturn.add(line); }
             reader.close();
         } catch (IOException e) {
-            Log.e(flavorTag, "IOException: Cannot read flavors.txt");
+            Log.e(FLAVOR_TAG, "IOException: Cannot read flavors.txt");
         }
         return toReturn;
     }
 
-    private Runnable grabFlavors = new Runnable() {
+    /**
+     * Sends the downloaded list to the handler where it will
+     * compare the new list to the list already shown to the
+     * user.
+     */
+    private Runnable createList = new Runnable() {
         public void run(){try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
@@ -89,6 +137,7 @@ public class FlavorsActivity extends DrawerActivity {
 
             Statement stmt;
             Connection con;
+            ArrayList<String> tempList = new ArrayList<>();
             try {
                 con = DriverManager.getConnection (URL, USERNAME, PASSWORD);
                 stmt = con.createStatement();
@@ -98,18 +147,28 @@ public class FlavorsActivity extends DrawerActivity {
 
                 while (result.next()) {
                     String flavor = result.getString("flavor");
-                    flavorsList.add(flavor);
-                    Log.e("Flavor", flavor);
+                    tempList.add(flavor);
+                    Log.e(FLAVOR_TAG, flavor);
                 }
 
-                Message msg = new Message();
-                msg.obj = "Sending";
-                handler.sendMessage(msg);
                 con.close();
+
+                Message msg = new Message();
+                msg.obj = tempList;
+                listHandler.sendMessage(msg);
             }
             catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    };
+
+    private Handler listHandler = new Handler() {
+        public void handleMessage(Message message) {
+            ArrayList<String> tempList;
+            if (message.obj != null)
+                tempList= (ArrayList<String>)message.obj;
+
         }
     };
 

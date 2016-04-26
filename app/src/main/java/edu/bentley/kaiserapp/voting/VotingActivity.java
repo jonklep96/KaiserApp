@@ -102,7 +102,6 @@ public class VotingActivity extends DrawerActivity {
                     i.putExtra(LoadingActivity.LOADING_KEY, "vote");
                     i.putExtra(LoadingActivity.FLAVOR_KEY, flavorVote);
                     startActivity(i);
-                    //(new Thread(voteTask)).start();
                 }
             });
         }
@@ -131,11 +130,11 @@ public class VotingActivity extends DrawerActivity {
                 while(results.next())
                     flavorList.add(results.getString("flavor"));
 
+                con.close();
+
                 Message msg = new Message();
                 msg.obj = flavorList;
                 listHandler.sendMessage(msg);
-
-                con.close();
             }
             catch (SQLException e) {
                 e.printStackTrace();
