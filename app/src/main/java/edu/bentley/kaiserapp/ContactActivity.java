@@ -147,6 +147,11 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, zoom));
     }
 
+    /**
+     * A Thread that connects the user to OpenWeatherMap then
+     * sends the information to a Handler where it can be
+     * written to the screen.
+     */
     private Runnable weatherTask = new Runnable() {
         @Override
         public void run() {

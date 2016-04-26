@@ -10,4 +10,7 @@
 
     <!-- Colors for Contact Activity -->
     <color name="contact_schedule">#FFDD88CC</color>
+
+    <!-- Colors for Loading Activity -->
+    <color name="loading_background">#44000000</color>
 </resources>

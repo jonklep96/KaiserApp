@@ -26,4 +26,13 @@
         <item name="g_saturday">11h-22h</item>
         <item name="g_sunday">11h-22h</item>
     </string-array>
+
+    <!-- Loading Screen -->
+    <string name="loading">Loading&#8230;</string>
+    <string name="title_activity_drawer">DrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

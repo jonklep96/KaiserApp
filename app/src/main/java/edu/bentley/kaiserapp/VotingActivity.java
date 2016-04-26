@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -24,10 +25,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class VotingActivity extends AppCompatActivity {
 
-    private final String votingTag = "VotingActivity";
+    private static final String VOTING_TAG = "VotingActivity";
 
     /**
      * Variables that store the information to access
@@ -42,7 +45,7 @@ public class VotingActivity extends AppCompatActivity {
      * that they choose.
      */
     private String phoneNumber;
-    private String flavorVote;
+    private String flavorVote; // Has a flavorKey to access from Intent
 
     /**
      * ArrayLists and adapter for the list of items that
@@ -80,6 +83,35 @@ public class VotingActivity extends AppCompatActivity {
         (new Thread(createList)).start();
     }
 
+    /**
+     * Handles the creation of the listView and
+     * the population of the items in the ListView.
+     */
+    private Handler listHandler = new Handler() {
+        public void handleMessage(Message message) {
+            choiceList = (ArrayList<String>)message.obj;
+            adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.choice_item, choiceList);
+            listView = (ListView)findViewById(android.R.id.list);
+            listView.setAdapter(adapter);
+
+            /**
+             * Reacts to when a button is clicked
+             * to choose what flavor to vote for.
+             */
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    flavorVote = ((TextView)view).getText().toString();
+                    Intent i = new Intent(getApplicationContext(), LoadingActivity.class);
+                    i.putExtra(LoadingActivity.LOADING_KEY, "vote");
+                    i.putExtra(LoadingActivity.FLAVOR_KEY, flavorVote);
+                    startActivity(i);
+                    //(new Thread(voteTask)).start();
+                }
+            });
+        }
+    };
+
     private Runnable createVoteTable = new Runnable() {
         public void run(){try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -99,107 +131,6 @@ public class VotingActivity extends AppCompatActivity {
                 stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Vanilla', '2016-01-26');");
                 stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Chocolate', '2016-02-26');");
                 stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Strawberry', '2016-03-26');");
-
-                con.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    private Runnable voteTask = new Runnable() {
-        public void run(){
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
-            }
-
-            Statement stmt;
-            Connection con;
-            try {
-                con = DriverManager.getConnection (URL, username, password);
-                stmt = con.createStatement();
-
-                ResultSet result = stmt.executeQuery("SELECT phone_number, date FROM tblVote");
-
-                Calendar c = Calendar.getInstance();
-                boolean flag = true;
-                while (result.next()) {
-                    Date date = result.getDate("date");
-                    String num = result.getString("phone_number");
-                    Log.e(votingTag, num + ": " + date.toString());
-                    if ((date.getMonth() == c.get(Calendar.MONTH)) && (date.getYear() == (c.get(Calendar.YEAR)-1900))) {
-                        flag = false;
-                        break;
-                    }
-                }
-
-                Message msg = new Message();
-                msg.obj = flag;
-                checkHandler.sendMessage(msg);
-                con.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    private Runnable placeVote = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
-            }
-
-            Statement stmt;
-            Connection con;
-            try {
-                con = DriverManager.getConnection (URL, username, password);
-
-                PreparedStatement preStmt = con.prepareStatement("INSERT INTO tblVote VALUES(?, ?, ?);");
-                preStmt.setString(1, phoneNumber);
-                preStmt.setString(2, flavorVote);
-                preStmt.setDate(3, new Date(Calendar.getInstance().getTimeInMillis()));
-                preStmt.executeUpdate();
-
-                Message msg = new Message();
-                msg.obj = "Sending";
-                voteHandler.sendMessage(msg);
-                con.close();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    private Runnable displayData = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
-            }
-
-            Statement stmt;
-            Connection con;
-            try {
-                con = DriverManager.getConnection (URL, username, password);
-                stmt = con.createStatement();
-
-                ResultSet result = stmt.executeQuery("SELECT phone_number, flavor, date FROM tblVote");
-                while(result.next()) {
-                    String phone = result.getString("phone_number");
-                    String flavor = result.getString("flavor");
-                    Date date = result.getDate("date");
-                    Log.d(votingTag, phone + ": " + flavor + " on " + date.toString());
-                }
 
                 con.close();
             }
@@ -271,52 +202,6 @@ public class VotingActivity extends AppCompatActivity {
             catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-    };
-
-    /**
-     * Tells whether or not the user
-     * has already voted in that month.
-     */
-    private Handler checkHandler = new Handler() {
-        public void handleMessage(Message message) {
-            boolean flag = (Boolean)message.obj;
-            if(flag)
-                (new Thread(placeVote)).start();
-            else
-                startActivity(new Intent(getApplicationContext(), VotingErrorActivity.class));
-        }
-    };
-
-    private Handler voteHandler = new Handler() {
-        public void handleMessage(Message message) {
-            Log.d(votingTag, "voteHandler");
-
-            Thread t = new Thread(displayData);
-            t.start();
-        }
-    };
-
-    private Handler listHandler = new Handler() {
-        public void handleMessage(Message message) {
-            choiceList = (ArrayList<String>)message.obj;
-            for(int i = 0; i < choiceList.size(); i++)
-                Log.e(votingTag, choiceList.get(i));
-            adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.choice_item, choiceList);
-            listView = (ListView)findViewById(android.R.id.list);
-            listView.setAdapter(adapter);
-
-            /**
-             * Reacts to when a button is clicked
-             * to choose what flavor to vote for.
-             */
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    flavorVote = ((TextView)view).getText().toString();
-                    (new Thread(voteTask)).start();
-                }
-            });
         }
     };
 }

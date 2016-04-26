@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "edu.bentley.kaiserapp"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -22,7 +22,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile files('libs/mysql-connector-java-5.1.26-bin.jar')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.google.android.gms:play-services:8.4.0'
-    compile files('libs/mysql-connector-java-5.1.26-bin.jar')
+    compile 'com.android.support:design:23.3.0'
 }
