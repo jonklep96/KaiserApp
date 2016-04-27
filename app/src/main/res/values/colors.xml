@@ -11,6 +11,9 @@
     <!-- Colors for Contact Activity -->
     <color name="contact_schedule">#FFDD88CC</color>
 
-    <!-- Colors for Loading Activity -->
+    <!-- Colors for Grey Transparent -->
     <color name="loading_background">#44000000</color>
+
+    <!-- Dark Text Color -->
+    <color name="flavor_item_text">#FF444444</color>
 </resources>

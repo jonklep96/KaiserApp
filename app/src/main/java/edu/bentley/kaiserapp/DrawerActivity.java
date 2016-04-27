@@ -1,7 +1,9 @@
 package edu.bentley.kaiserapp;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -46,13 +48,20 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
      * Use a ViewFlipper to change the content inside of the
      * application.
      */
-    ViewFlipper vf;
+    public static ViewFlipper vf;
 
     /**
      * Boolean value to see if the application is
      * connected to the Internet or not
      */
-    private boolean isConnected = true;
+    private static boolean isConnected = true;
+
+    /**
+     * Declare a Snackbar that will be used to
+     * notify the user that they have lost connection
+     * to the Internet
+     */
+    private static Snackbar sb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getIsConnected(this);
     }
 
     @Override
@@ -134,13 +145,19 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 startActivity(new Intent(this, FlavorsActivity.class));
                 break;
             case R.id.nav_voting:
-                startActivity(new Intent(this, VotingActivity.class));
+                if (isConnected)
+                    startActivity(new Intent(this, VotingActivity.class));
+                else
+                    createOfflineDialog("You must be online to vote for the next flavor");
                 break;
             case R.id.nav_developer:
                 startActivity(new Intent(this, DeveloperActivity.class));
                 break;
             case R.id.nav_map:
-                startActivity(new Intent(this, ContactActivity.class));
+                if (isConnected)
+                    startActivity(new Intent(this, ContactActivity.class));
+                else
+                    createOfflineDialog("You must be online to access the map");
                 break;
             case R.id.nav_sched: break;
             case R.id.nav_contact: break;
@@ -172,17 +189,42 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
      * then updates the variable to let the program
      * know if there is no connection.
      */
-    public class ConnectionReceiver extends BroadcastReceiver {
+    public static class ConnectionReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectivityManager
-                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-                isConnected = true;
-            } else
-                isConnected = false;
+            DrawerActivity.getIsConnected(context);
         }
+    }
+
+    /**
+     * Creates a Snackbar if the phone is Offline
+     */
+    public static void getIsConnected(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+            isConnected = true;
+            sb.dismiss();
+        } else {
+            isConnected = false;
+            sb = Snackbar.make(vf, "\t\t\t\t\tOffline", Snackbar.LENGTH_INDEFINITE);
+            sb.show();
+        }
+    }
+
+    /**
+     * Creates an AlertDialog if the user selects an option
+     * that requires an Internet connection to use.
+     */
+    public void createOfflineDialog(String dialogText) {
+        AlertDialog dialog = new AlertDialog.Builder(DrawerActivity.this).create();
+        dialog.setTitle("Offline");
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, dialogText, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
