@@ -49,9 +49,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     ViewFlipper vf;
 
     /**
-     * Time to set the connection Thread to sleep for
+     * Boolean value to see if the application is
+     * connected to the Internet or not
      */
-    private final static long SLEEP_TIME = 15000;
     private boolean isConnected = true;
 
     @Override
@@ -99,9 +99,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.drawer, menu);
-
         TextView header_phone = (TextView)findViewById(R.id.header_phone);
         header_phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,21 +119,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         });
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
