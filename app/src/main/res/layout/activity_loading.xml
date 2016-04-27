@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/loading_background"
-    tools:context=".LoadingActivity">
+    tools:context=".voting.LoadingActivity">
 
     <ProgressBar android:id="@+id/pb_loading"
         android:layout_width="60dp"

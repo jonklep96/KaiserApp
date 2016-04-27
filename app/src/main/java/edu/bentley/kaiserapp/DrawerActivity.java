@@ -1,8 +1,13 @@
 package edu.bentley.kaiserapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -42,6 +47,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
      */
     ViewFlipper vf;
 
+    /**
+     * Time to set the connection Thread to sleep for
+     */
+    private final static long SLEEP_TIME = 15000;
+    private boolean isConnected = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +84,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        (new Thread(checkConnection)).start();
     }
 
     @Override
@@ -127,10 +140,13 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * The list of items able to be selected from the Navigation Drawer.
+     * When selected, they will start a new Activity
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_start: break;
             case R.id.nav_flavors:
@@ -154,9 +170,13 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
+    /**
+     * Sets the content view to the layout chosen
+     * in the navigation drawer.
+     */
     public void setViewFlipperContent(String activityName) {
         if (activityName == null)
-            vf.setDisplayedChild(2);
+            vf.setDisplayedChild(0);
         switch (activityName) {
             //case StartActivity.NAME: break;
             case FlavorsActivity.NAME: vf.setDisplayedChild(0); break;
@@ -165,4 +185,48 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case ContactActivity.NAME: vf.setDisplayedChild(3); break;
         }
     }
+
+    /**
+     * Checks the internet connection every so often
+     */
+    private Runnable checkConnection = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(SLEEP_TIME);
+
+                Message msg = new Message();
+                msg.obj = isNetworkAvailable();
+                connectionHandler.sendMessage(msg);
+
+                (new Thread(checkConnection)).start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    /**
+     * Should be run on a Thread to check and see if there is
+     * a network connection. If not, layouts should be
+     * modified to fit the screen better.
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    /**
+     * Handler to act if there is no Internet connection
+     */
+    private Handler connectionHandler = new Handler() {
+        public void handleMessage(Message message) {
+            if (!(Boolean)message.obj) {
+                isConnected = false;
+                Snackbar.make(vf, "Offline", Snackbar.LENGTH_INDEFINITE).show();
+            }
+        }
+    };
 }

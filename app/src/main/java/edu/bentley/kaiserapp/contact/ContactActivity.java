@@ -192,16 +192,4 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             }
         }
     };
-
-    /**
-     * Should be run on a Thread to check and see if there is
-     * a network connection. If not, layouts should be
-     * modified to fit the screen better.
-     */
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 }

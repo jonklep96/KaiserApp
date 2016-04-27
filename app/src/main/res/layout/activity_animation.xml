@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout"
+    android:id="@+id/layout_animation"
     android:background="@color/colorAccent"
-    tools:context=".Animation.animation">
-
+    tools:context=".animation.Animation">
 
     <ImageView
         android:id="@+id/logo2"

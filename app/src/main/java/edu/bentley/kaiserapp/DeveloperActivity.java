@@ -90,9 +90,19 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblFlavors;");
                 stmt.executeUpdate("CREATE TABLE tblFlavors(id INTEGER PRIMARY KEY, flavor VARCHAR(25));");
 
-                stmt.executeUpdate("insert into tblFlavors values(1, 'Vanilla');");
-                stmt.executeUpdate("insert into tblFlavors values(2, 'Chocolate');");
-                stmt.executeUpdate("insert into tblFlavors values(3, 'Strawberry');");
+                stmt.executeUpdate("insert into tblFlavors values(1, 'Vanille');");
+                stmt.executeUpdate("insert into tblFlavors values(2, 'Schokolade');");
+                stmt.executeUpdate("insert into tblFlavors values(3, 'Walnuss');");
+                stmt.executeUpdate("insert into tblFlavors values(4, 'Kirschwasser');");
+                stmt.executeUpdate("insert into tblFlavors values(5, 'Joghurt');");
+                stmt.executeUpdate("insert into tblFlavors values(6, 'Sahne-Grieß-Himbeer');");
+                stmt.executeUpdate("insert into tblFlavors values(7, 'Stracciatella');");
+                stmt.executeUpdate("insert into tblFlavors values(8, 'Erdbeer');");
+                stmt.executeUpdate("insert into tblFlavors values(9, 'Zwetschge');");
+                stmt.executeUpdate("insert into tblFlavors values(10, 'Zitronenmelisse');");
+                stmt.executeUpdate("insert into tblFlavors values(11, 'Pfirsich');");
+                stmt.executeUpdate("insert into tblFlavors values(12, 'Rhabarber');");
+                stmt.executeUpdate("insert into tblFlavors values(13, 'Mirabelle');");
 
                 con.close();
 

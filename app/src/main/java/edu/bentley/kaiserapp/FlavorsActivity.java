@@ -148,7 +148,6 @@ public class FlavorsActivity extends DrawerActivity {
                 while (result.next()) {
                     String flavor = result.getString("flavor");
                     tempList.add(flavor);
-                    Log.e(FLAVOR_TAG, flavor);
                 }
 
                 con.close();
@@ -163,13 +162,41 @@ public class FlavorsActivity extends DrawerActivity {
         }
     };
 
+    /**
+     * Checks to see if the list of ice cream
+     * is current to the one in the database.
+     */
     private Handler listHandler = new Handler() {
         public void handleMessage(Message message) {
             ArrayList<String> tempList;
-            if (message.obj != null)
-                tempList= (ArrayList<String>)message.obj;
+            if (message.obj != null) {
+                tempList = (ArrayList<String>) message.obj;
 
+                boolean flag = true;
+                for (String e : flavorsList) {
+                    for (String s : tempList) {
+                        if (!e.equals(s)) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (!flag)
+                        break;
+                }
+
+                if (!flag)
+                    updateList(tempList);
+            }
         }
     };
+
+    /**
+     * Updates the list of ice cream if it is not current
+     */
+    public void updateList(ArrayList<String> list) {
+        flavorsList.clear();
+        for (String e : list)
+            flavorsList.add(e);
+    }
 
 }

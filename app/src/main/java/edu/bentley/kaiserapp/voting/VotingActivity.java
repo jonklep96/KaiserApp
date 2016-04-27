@@ -4,16 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.speech.tts.TextToSpeech;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.sql.Connection;
@@ -25,15 +23,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.StringTokenizer;
 
 import edu.bentley.kaiserapp.DrawerActivity;
-import edu.bentley.kaiserapp.LoadingActivity;
 import edu.bentley.kaiserapp.R;
 
 public class VotingActivity extends DrawerActivity {
 
+    /**
+     * Tag for the Log in the VotingActivity
+     */
     private static final String VOTING_TAG = "VotingActivity";
 
     public final static String NAME = "voting";
@@ -53,6 +51,16 @@ public class VotingActivity extends DrawerActivity {
     private ArrayAdapter<String> adapter;
     private ListView listView;
 
+    /**
+     * The ProgressBar that will be displayed when accessing the Internet
+     */
+    private ProgressBar pbVoting;
+
+    /**
+     * Gets updated when the program is threading
+     */
+    private boolean isMultiThreading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState == null)
@@ -70,46 +78,51 @@ public class VotingActivity extends DrawerActivity {
                 getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         phoneNumber = phoneManager.getLine1Number();
 
+        pbVoting = (ProgressBar)findViewById(R.id.pb_voting);
+
         /**
          * Build the ListView object to help the user
          * select what flavor they want to see on the
          * menu next month.
          */
         choiceList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.choice_item, choiceList);
+        listView = (ListView)findViewById(R.id.lv_voting);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        /**
+         * Reacts to when a button is clicked
+         * to choose what flavor to vote for.
+         */
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                flavorVote = ((TextView)view).getText().toString();
+                (new Thread(validateVoteTask)).start();
+                listView.setVisibility(View.INVISIBLE);
+                pbVoting.setVisibility(View.VISIBLE);
+            }
+        });
+
         (new Thread(createList)).start();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!isMultiThreading)
+            super.onBackPressed();
+    }
+
     /**
-     * Handles the creation of the listView and
-     * the population of the items in the ListView.
+     * Connects to the database to see if there is a difference
+     * between the locally stored flavors and the ones
+     * on the database.
      */
-    private Handler listHandler = new Handler() {
-        public void handleMessage(Message message) {
-            choiceList = (ArrayList<String>)message.obj;
-            adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.choice_item, choiceList);
-            listView = (ListView)findViewById(android.R.id.list);
-            listView.setAdapter(adapter);
-
-            /**
-             * Reacts to when a button is clicked
-             * to choose what flavor to vote for.
-             */
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    flavorVote = ((TextView)view).getText().toString();
-                    Intent i = new Intent(getApplicationContext(), LoadingActivity.class);
-                    i.putExtra(LoadingActivity.LOADING_KEY, "vote");
-                    i.putExtra(LoadingActivity.FLAVOR_KEY, flavorVote);
-                    startActivity(i);
-                }
-            });
-        }
-    };
-
     private Runnable createList = new Runnable() {
         @Override
         public void run() {
+            isMultiThreading = true;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException e) {
@@ -125,7 +138,6 @@ public class VotingActivity extends DrawerActivity {
                 preStmt.setInt(1, (new Date(Calendar.getInstance().getTimeInMillis())).getMonth()+1);
                 preStmt.setInt(2, (new Date(Calendar.getInstance().getTimeInMillis())).getYear()+1900);
                 ResultSet results = preStmt.executeQuery();
-
                 ArrayList<String> flavorList = new ArrayList<>();
                 while(results.next())
                     flavorList.add(results.getString("flavor"));
@@ -138,7 +150,147 @@ public class VotingActivity extends DrawerActivity {
             }
             catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                isMultiThreading = false;
             }
+        }
+    };
+
+    /**
+     * Handles the creation of the listView and
+     * the population of the items in the ListView.
+     */
+    private Handler listHandler = new Handler() {
+        public void handleMessage(Message message) {
+            findViewById(R.id.pb_voting).setVisibility(View.INVISIBLE);
+            updateList((ArrayList<String>)message.obj);
+        }
+    };
+
+    /**
+     * Adds the flavors downloaded from the database to
+     * update the voting list.
+     */
+    private void updateList(ArrayList<String> list) {
+        for (String e : list)
+            choiceList.add(e);
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Checks the other votes placed this month
+     * to see if the user has already voted during
+     * the current month.
+     */
+    private Runnable validateVoteTask = new Runnable() {
+        public void run(){
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+
+            Statement stmt;
+            Connection con;
+            try {
+                con = DriverManager.getConnection (URL, USERNAME, PASSWORD);
+                stmt = con.createStatement();
+
+                ResultSet result = stmt.executeQuery("SELECT phone_number, date FROM tblVote");
+
+                Calendar c = Calendar.getInstance();
+                boolean flag = true;
+                while (result.next()) {
+                    Date date = result.getDate("date");
+                    String num = result.getString("phone_number");
+                    Log.e(VOTING_TAG, num + ": " + date.toString());
+                    if ((date.getMonth() == c.get(Calendar.MONTH)) && (date.getYear() == (c.get(Calendar.YEAR)-1900))) {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                Message msg = new Message();
+                msg.obj = flag;
+                checkHandler.sendMessage(msg);
+                con.close();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    /**
+     * Handler used to either place the vote into
+     * the database or to reject the user since they
+     * already voted that month.
+     */
+    private Handler checkHandler = new Handler() {
+        public void handleMessage(Message message) {
+            boolean flag = (Boolean)message.obj;
+            if(flag)
+                (new Thread(voteTask)).start();
+            else {
+                /**
+                 * Place an error notification here to let the user know that they already
+                 * voted that month
+                 */
+                listView.setVisibility(View.VISIBLE);
+                pbVoting.setVisibility(View.INVISIBLE);
+            }
+        }
+    };
+
+    /**
+     * Place the vote into the database.
+     */
+    private Runnable voteTask = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+            Connection con;
+            try {
+                con = DriverManager.getConnection (URL, USERNAME, PASSWORD);
+
+                PreparedStatement preStmt = con.prepareStatement("INSERT INTO tblVote VALUES(?, ?, ?);");
+                preStmt.setString(1, phoneNumber);
+                preStmt.setString(2, flavorVote);
+                Date date = new Date(Calendar.getInstance().getTimeInMillis());
+                preStmt.setDate(3, date);
+                preStmt.executeUpdate();
+
+                con.close();
+
+                Message msg = new Message();
+                msg.obj = flavorVote;
+                voteHandler.sendMessage(msg);
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    /**
+     * Recognizes when the placing of the vote into
+     * the database had been completed. It will send a
+     * notification to let the user know that the
+     * transaction is complete.
+     */
+    private Handler voteHandler = new Handler() {
+        public void handleMessage(Message message) {
+            listView.setVisibility(View.VISIBLE);
+            pbVoting.setVisibility(View.INVISIBLE);
+            String vote = (String)message.obj;
+
+            /**
+             * Display notification here
+             */
         }
     };
 }

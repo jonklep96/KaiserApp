@@ -12,6 +12,7 @@
         <item name="android:background">@color/tv_voting</item>
         <item name="android:textSize">@dimen/tv_voting_textsize</item>
         <item name="android:padding">@dimen/tv_voting_padding</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Schedule_Left" parent="AppTheme">

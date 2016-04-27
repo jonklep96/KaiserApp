@@ -31,10 +31,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Animation.animation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:name=".animation.Animation"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,16 +40,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".DeveloperActivity">
-
-        </activity>
+        <activity android:name=".DeveloperActivity" />
         <activity android:name=".FlavorsActivity" />
         <activity android:name=".contact.ContactActivity" />
         <activity android:name=".voting.VotingActivity" />
-        <activity android:name=".voting.VotingErrorActivity" />
-        <activity android:name=".LoadingActivity" />
-        <activity android:name=".voting.VotingCompleteActivity" />
         <activity android:name=".DrawerActivity" />
     </application>
 

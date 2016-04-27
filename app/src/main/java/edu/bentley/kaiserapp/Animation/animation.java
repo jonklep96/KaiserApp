@@ -1,11 +1,10 @@
-package edu.bentley.kaiserapp.Animation;
+package edu.bentley.kaiserapp.animation;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Window;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,14 +12,11 @@ import android.widget.RelativeLayout;
 import edu.bentley.kaiserapp.DeveloperActivity;
 import edu.bentley.kaiserapp.R;
 
-/**
- * Created by COOPE1_DAVI on 4/26/2016.
- */
-public class animation extends Activity {
+public class Animation extends Activity {
 
     private RelativeLayout layout;
     private ImageView image;
-    Thread splashTread;
+    Thread splashThread;
 
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -33,20 +29,16 @@ public class animation extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animation);
         StartAnimations();
-
     }
 
     private void StartAnimations() {
-
-        layout = (RelativeLayout) findViewById(R.id.layout);
         image = (ImageView) findViewById(R.id.logo2);
         image.setImageResource(R.drawable.largecone);
-        Animation an = AnimationUtils.loadAnimation(this, R.anim.animate);
-        // Start the animation
-        layout.startAnimation(an);
+        android.view.animation.Animation an = AnimationUtils.loadAnimation(this, R.anim.animate);
+        // Start the Animation
+        image.startAnimation(an);
 
-
-        splashTread = new Thread() {
+        splashThread = new Thread() {
             @Override
             public void run() {
                 try {
@@ -56,22 +48,18 @@ public class animation extends Activity {
                         sleep(100);
                         waited += 100;
                     }
-                    Intent intent = new Intent(animation.this,
+                    Intent intent = new Intent(Animation.this,
                             DeveloperActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
-                    animation.this.finish();
+                    Animation.this.finish();
                 } catch (InterruptedException e) {
                     // do nothing
                 } finally {
-                    animation.this.finish();
+                    Animation.this.finish();
                 }
-
             }
         };
-        splashTread.start();
+        splashThread.start();
     }
-
-
 }
-
