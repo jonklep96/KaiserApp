@@ -1,11 +1,8 @@
-package edu.bentley.kaiserapp.contact;
+package edu.bentley.kaiserapp.information;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -52,7 +49,6 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
      * This will be used to find the store in Google Maps
      * and the weather API.
      */
-    private final String STORE_NAME = "Kaiserstühler Landeis";
     private final String STORE_ADDRESS = "Untere Guldenstraße 10, Königschaffhausen 79346 Endingen am Kaiserstuhl, Freiburg, Baden-Württemberg, Germany";
     private LatLng storeLatLng;
     private final float zoom = 16.0f;
@@ -83,21 +79,12 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                     }
                 }
         );
-
-        /**
-         * Write the schedule to the screen programmatically.
-         */
-        TextView scheduleDays = (TextView)findViewById(R.id.tv_schedule_days);
-        TextView scheduleTimes = (TextView)findViewById(R.id.tv_schedule_time);
-        for(String e : getResources().getStringArray(R.array.schedule_days))
-            scheduleDays.append(e+"\n");
-        for(String e : getResources().getStringArray(R.array.schedule_times))
-            scheduleTimes.append(e+"\n");
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        findViewById(R.id.weather_widget).setVisibility(View.INVISIBLE);
         WEATHER_KEY = getResources().getString(R.string.openweather_key);
         Thread weather = new Thread(weatherTask);
         weather.start();
@@ -110,6 +97,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                 ((TextView)findViewById(R.id.tv_high_temp)).setText(String.format("%.0f",_weather.getHighTemperature()));
                 ((TextView)findViewById(R.id.tv_low_temp)).setText(String.format("%.0f",_weather.getLowTemperature()));
                 ((ImageView)findViewById(R.id.iv_weather)).setImageBitmap(_weather.getIcon());
+                findViewById(R.id.weather_widget).setVisibility(View.VISIBLE);
             }
         };
     }

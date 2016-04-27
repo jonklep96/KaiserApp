@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import edu.bentley.kaiserapp.DeveloperActivity;
+import edu.bentley.kaiserapp.main.DeveloperActivity;
 import edu.bentley.kaiserapp.R;
 
 public class Animation extends Activity {

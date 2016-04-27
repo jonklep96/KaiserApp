@@ -9,9 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,8 +22,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import edu.bentley.kaiserapp.contact.*;
-import edu.bentley.kaiserapp.voting.VotingActivity;
+import edu.bentley.kaiserapp.information.*;
+import edu.bentley.kaiserapp.main.DeveloperActivity;
+import edu.bentley.kaiserapp.main.FlavorsActivity;
+import edu.bentley.kaiserapp.main.VotingActivity;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -84,7 +83,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         if (savedInstanceState != null)
             setViewFlipperContent(savedInstanceState.getString(ACTIVITY_KEY));
         else
-            vf.setDisplayedChild(2);
+            vf.setDisplayedChild(0);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -159,7 +158,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 else
                     createOfflineDialog("You must be online to access the map");
                 break;
-            case R.id.nav_sched: break;
+            case R.id.nav_sched:
+                startActivity(new Intent(this, ScheduleActivity.class));
+                break;
             case R.id.nav_contact: break;
         }
 
@@ -181,6 +182,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case VotingActivity.NAME: vf.setDisplayedChild(1); break;
             case DeveloperActivity.NAME: vf.setDisplayedChild(2); break;
             case ContactActivity.NAME: vf.setDisplayedChild(3); break;
+            case ScheduleActivity.NAME: vf.setDisplayedChild(4); break;
         }
     }
 
@@ -205,7 +207,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
             isConnected = true;
-            sb.dismiss();
+            if (sb != null)
+                sb.dismiss();
         } else {
             isConnected = false;
             sb = Snackbar.make(vf, "\t\t\t\t\tOffline", Snackbar.LENGTH_INDEFINITE);

@@ -8,9 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".contact.ContactActivity">
+        tools:context=".information.ContactActivity">
 
-        <include layout="@layout/weather_widget" />
+        <include android:id="@+id/weather_widget"
+            layout="@layout/weather_widget" />
 
         <fragment android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -23,20 +24,5 @@
             android:gravity="center"
             android:textSize="@dimen/store_address_textsize"
             android:text="@string/store_address"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView android:id="@+id/tv_schedule_days"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Schedule_Left"/>
-            <TextView android:id="@+id/tv_schedule_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Schedule_Right"/>
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -10,14 +10,14 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -32,7 +32,7 @@
         <include android:id="@+id/include_voting" layout="@layout/activity_voting" />
         <include android:id="@+id/include_developer" layout="@layout/activity_developer" />
         <include android:id="@+id/include_map" layout="@layout/activity_contact" />
-        <!--<include android:id="@+id/include_sched" layout="@layout/activity_voting" /> debug-->
+        <include android:id="@+id/include_sched" layout="@layout/activity_schedule" />
         <!--<include android:id="@+id/include_contact" layout="@layout/activity_developer" /> debug-->
     </ViewFlipper>
 

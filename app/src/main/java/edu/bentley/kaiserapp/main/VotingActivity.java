@@ -1,7 +1,6 @@
-package edu.bentley.kaiserapp.voting;
+package edu.bentley.kaiserapp.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;

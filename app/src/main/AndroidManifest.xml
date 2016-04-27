@@ -32,18 +32,17 @@
 
         <activity
             android:name=".animation.Animation"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".DeveloperActivity" />
-        <activity android:name=".FlavorsActivity" />
-        <activity android:name=".contact.ContactActivity" />
-        <activity android:name=".voting.VotingActivity" />
+        <activity android:name=".main.DeveloperActivity" />
+        <activity android:name=".main.FlavorsActivity" />
+        <activity android:name=".information.ContactActivity" />
+        <activity android:name=".main.VotingActivity" />
         <activity android:name=".DrawerActivity" />
 
         <receiver android:name=".DrawerActivity$ConnectionReceiver">
@@ -51,6 +50,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".information.ScheduleActivity"></activity>
     </application>
 
 </manifest>

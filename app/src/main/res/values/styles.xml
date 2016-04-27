@@ -21,6 +21,7 @@
         <item name="android:layout_marginStart">@dimen/tv_schedule_margin_side</item>
         <item name="android:layout_marginLeft">@dimen/tv_schedule_margin_side</item>
         <item name="android:gravity">left</item>
+        <item name="android:textSize">24sp</item>
     </style>
 
     <style name="Schedule_Right" parent="AppTheme">
@@ -29,16 +30,13 @@
         <item name="android:layout_marginEnd">@dimen/tv_schedule_margin_side</item>
         <item name="android:layout_marginRight">@dimen/tv_schedule_margin_side</item>
         <item name="android:gravity">right</item>
+        <item name="android:textSize">24sp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     
     <style name="ListItem" parent="AppTheme">
         <item name="android:gravity">center</item>

@@ -1,4 +1,4 @@
-package edu.bentley.kaiserapp;
+package edu.bentley.kaiserapp.main;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +26,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.StringTokenizer;
+
+import edu.bentley.kaiserapp.DrawerActivity;
+import edu.bentley.kaiserapp.R;
 
 public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnInitListener {
 
