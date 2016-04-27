@@ -45,6 +45,12 @@
         <activity android:name=".contact.ContactActivity" />
         <activity android:name=".voting.VotingActivity" />
         <activity android:name=".DrawerActivity" />
+
+        <receiver android:name=".DrawerActivity$ConnectionReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package edu.bentley.kaiserapp;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -84,8 +85,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        (new Thread(checkConnection)).start();
     }
 
     @Override
@@ -187,46 +186,21 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     }
 
     /**
-     * Checks the internet connection every so often
+     * Looks for a change in the Internet connection
+     * then updates the variable to let the program
+     * know if there is no connection.
      */
-    private Runnable checkConnection = new Runnable() {
+    public class ConnectionReceiver extends BroadcastReceiver {
         @Override
-        public void run() {
-            try {
-                Thread.sleep(SLEEP_TIME);
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-                Message msg = new Message();
-                msg.obj = isNetworkAvailable();
-                connectionHandler.sendMessage(msg);
-
-                (new Thread(checkConnection)).start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    /**
-     * Should be run on a Thread to check and see if there is
-     * a network connection. If not, layouts should be
-     * modified to fit the screen better.
-     */
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    /**
-     * Handler to act if there is no Internet connection
-     */
-    private Handler connectionHandler = new Handler() {
-        public void handleMessage(Message message) {
-            if (!(Boolean)message.obj) {
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                isConnected = true;
+            } else
                 isConnected = false;
-                Snackbar.make(vf, "Offline", Snackbar.LENGTH_INDEFINITE).show();
-            }
         }
-    };
+    }
 }

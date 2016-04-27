@@ -41,7 +41,7 @@ public class VotingActivity extends DrawerActivity {
      * that they choose.
      */
     private String phoneNumber;
-    private String flavorVote; // Has a flavorKey to access from Intent
+    private String flavorVote;
 
     /**
      * ArrayLists and adapter for the list of items that
@@ -203,7 +203,6 @@ public class VotingActivity extends DrawerActivity {
                 while (result.next()) {
                     Date date = result.getDate("date");
                     String num = result.getString("phone_number");
-                    Log.e(VOTING_TAG, num + ": " + date.toString());
                     if ((date.getMonth() == c.get(Calendar.MONTH)) && (date.getYear() == (c.get(Calendar.YEAR)-1900))) {
                         flag = false;
                         break;
