@@ -1,5 +1,6 @@
 package edu.bentley.kaiserapp.main;
 
+import android.app.Notification;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -231,9 +232,17 @@ public class VotingActivity extends DrawerActivity {
                 (new Thread(voteTask)).start();
             else {
                 /**
-                 * Place an error notification here to let the user know that they already
-                 * voted that month
+                 * Display notification here
                  */
+                mNotifyDetails = new Notification.Builder(getApplicationContext())
+                        .setContentTitle("Unuccessful")    //set Notification text and icon
+                        .setContentText("You have already voted this month")
+                        .setSmallIcon(R.drawable.store_marker)
+                        .setTicker("You have already voted")
+                        .setWhen(System.currentTimeMillis())
+                        .setLights(Integer.MAX_VALUE,  500,  500)
+                        .build();
+                mNotificationManager.notify(NOTIFY_KEY, NOTIFY_ID, mNotifyDetails);
                 listView.setVisibility(View.VISIBLE);
                 pbVoting.setVisibility(View.INVISIBLE);
             }
@@ -289,6 +298,15 @@ public class VotingActivity extends DrawerActivity {
             /**
              * Display notification here
              */
+            mNotifyDetails = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("Successful")    //set Notification text and icon
+                    .setContentText("You successfully voted for " + vote)
+                    .setSmallIcon(R.drawable.store_marker)
+                    .setTicker("You Voted")
+                    .setWhen(System.currentTimeMillis())
+                    .setLights(Integer.MAX_VALUE,  500,  500)
+                    .build();
+            mNotificationManager.notify(NOTIFY_KEY, NOTIFY_ID, mNotifyDetails);
         }
     };
 }

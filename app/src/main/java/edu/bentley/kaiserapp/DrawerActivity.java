@@ -1,6 +1,8 @@
 package edu.bentley.kaiserapp;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +38,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     public final static String ACTIVITY_KEY = "activity";
 
     /**
+     * Notification Key to be used to find
+     * the notification from an Intent
+     */
+    public final static String NOTIFY_KEY = "notificationId";
+
+    /**
      * Variables that store the information to access
      * the Bentley Frodo database.
      */
@@ -62,6 +70,17 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
      */
     private static Snackbar sb;
 
+    /**
+     * Notification Manager that will be used to send notifications
+     * throughout the application. This will be accessible anywhere
+     * that inherits from DrawerActivity.
+     * mNotifyDetails will be the Notification from which the
+     * application will send out.
+     */
+    public NotificationManager mNotificationManager;
+    public Notification mNotifyDetails;
+    public final static int NOTIFY_ID = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,10 +88,17 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
 
         /**
          * Creates a Toolbar on the first creation of the application.
+         * Also clears away any notifications that may have opened up
+         * the application.
          */
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        if (getSupportActionBar() == null)
+        mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        if (getSupportActionBar() == null) {
             setSupportActionBar(toolbar);
+
+            // Clears the notification
+            mNotificationManager.cancel(getIntent().getIntExtra(NOTIFY_KEY, 0));
+        }
 
         /**
          * Find the ViewFlipper which will allow the

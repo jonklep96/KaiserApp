@@ -93,9 +93,9 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                 Weather _weather = (Weather)message.obj;
 
                 findViewById(R.id.pb_weather_widget).setVisibility(View.INVISIBLE);
-                ((TextView)findViewById(R.id.tv_cur_temp)).setText(String.format("%.0f",_weather.getCurrentTemperature()));
-                ((TextView)findViewById(R.id.tv_high_temp)).setText(String.format("%.0f",_weather.getHighTemperature()));
-                ((TextView)findViewById(R.id.tv_low_temp)).setText(String.format("%.0f",_weather.getLowTemperature()));
+                ((TextView)findViewById(R.id.tv_cur_temp)).setText(String.format("%.0f°C",_weather.getCurrentTemperature()));
+                ((TextView)findViewById(R.id.tv_high_temp)).setText(String.format("%.0f°C",_weather.getHighTemperature()));
+                ((TextView)findViewById(R.id.tv_low_temp)).setText(String.format("%.0f°C",_weather.getLowTemperature()));
                 ((ImageView)findViewById(R.id.iv_weather)).setImageBitmap(_weather.getIcon());
                 findViewById(R.id.weather_widget).setVisibility(View.VISIBLE);
             }
