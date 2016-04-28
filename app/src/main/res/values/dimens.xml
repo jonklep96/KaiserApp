@@ -34,5 +34,5 @@
 
     <!-- Dimensinos for Start Activity -->
     <dimen name="title_textsize">38sp</dimen>
-    <dimen name="start_pic_margin_top">60dp</dimen>
+    <dimen name="start_pic_margin_top">45dp</dimen>
 </resources>

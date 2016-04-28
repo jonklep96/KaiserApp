@@ -27,6 +27,7 @@ import android.widget.ViewFlipper;
 import edu.bentley.kaiserapp.information.*;
 import edu.bentley.kaiserapp.main.DeveloperActivity;
 import edu.bentley.kaiserapp.main.FlavorsActivity;
+import edu.bentley.kaiserapp.main.StartActivity;
 import edu.bentley.kaiserapp.main.VotingActivity;
 
 public class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -165,7 +166,9 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_start: break;
+            case R.id.nav_start:
+                startActivity(new Intent(this, StartActivity.class));
+                break;
             case R.id.nav_flavors:
                 startActivity(new Intent(this, FlavorsActivity.class));
                 break;
@@ -203,12 +206,12 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         if (activityName == null)
             vf.setDisplayedChild(0);
         switch (activityName) {
-            //case StartActivity.NAME: break;
-            case FlavorsActivity.NAME: vf.setDisplayedChild(0); break;
-            case VotingActivity.NAME: vf.setDisplayedChild(1); break;
-            case DeveloperActivity.NAME: vf.setDisplayedChild(2); break;
-            case ContactActivity.NAME: vf.setDisplayedChild(3); break;
-            case ScheduleActivity.NAME: vf.setDisplayedChild(4); break;
+            case StartActivity.NAME: vf.setDisplayedChild(0);break;
+            case FlavorsActivity.NAME: vf.setDisplayedChild(1); break;
+            case VotingActivity.NAME: vf.setDisplayedChild(2); break;
+            case DeveloperActivity.NAME: vf.setDisplayedChild(3); break;
+            case ContactActivity.NAME: vf.setDisplayedChild(4); break;
+            case ScheduleActivity.NAME: vf.setDisplayedChild(5); break;
         }
     }
 

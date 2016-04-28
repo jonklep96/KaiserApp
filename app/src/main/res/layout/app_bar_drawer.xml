@@ -25,9 +25,9 @@
         android:id="@+id/vf"
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
 
-        <!-- <include android:id="@+id/include_start" layout="@layout/activity_start" /> debug-->
+        <include android:id="@+id/include_start" layout="@layout/activity_start" />
         <include android:id="@+id/include_flavors" layout="@layout/activity_flavors" />
         <include android:id="@+id/include_voting" layout="@layout/activity_voting" />
         <include android:id="@+id/include_developer" layout="@layout/activity_developer" />
