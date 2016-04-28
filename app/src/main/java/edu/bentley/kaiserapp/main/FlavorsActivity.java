@@ -1,6 +1,7 @@
 package edu.bentley.kaiserapp.main;
 
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -67,9 +68,9 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
 
         super.onCreate(savedInstanceState);
 
-        //Clearing the notification
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(getIntent().getIntExtra("NotificationId", 0));
+        // Clearing the notification
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(NOTIFY_ID);
 
         try {
             flavorsList = readList();

@@ -80,7 +80,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
      */
     public NotificationManager mNotificationManager;
     public Notification mNotifyDetails;
-    public final static int NOTIFY_ID = 100;
+    public final static int NOTIFY_ID = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             setSupportActionBar(toolbar);
 
             // Clears the notification
-            mNotificationManager.cancel(getIntent().getIntExtra(NOTIFY_KEY, 0));
+            mNotificationManager.cancel(NOTIFY_ID);
         }
 
         /**
