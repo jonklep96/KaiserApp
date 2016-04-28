@@ -17,7 +17,7 @@
     <dimen name="weather_temp_textsize2">20sp</dimen>
 
     <!-- Address in ContactActivity -->
-    <dimen name="store_address_textsize">18sp</dimen>
+    <dimen name="store_address_textsize">24sp</dimen>
 
     <!-- Voting Activity Values -->
     <dimen name="tv_voting_textsize">30sp</dimen>

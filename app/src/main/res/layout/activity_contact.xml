@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
-    <LinearLayout
+    android:orientation="vertical"
+    android:background="@color/colorAccent"
+    tools:context=".information.ContactActivity">
+
+    <include android:id="@+id/weather_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/weather_widget"
+        android:layout_gravity="center"/>
+
+    <TextView android:id="@+id/tv_store_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".information.ContactActivity">
+        android:gravity="center"
+        android:textSize="@dimen/store_address_textsize"
+        android:text="@string/store_address"
+        android:textColor="@color/flavor_item_text"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <include android:id="@+id/weather_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                layout="@layout/weather_widget"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-
-        <fragment android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/map_height" />
-
-        <TextView android:id="@+id/tv_store_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/store_address_textsize"
-            android:text="@string/store_address"/>
-    </LinearLayout>
-</ScrollView>
+    <fragment android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

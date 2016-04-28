@@ -148,9 +148,13 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblVote;");
                 stmt.executeUpdate("CREATE TABLE tblVote(phone_number VARCHAR(14), flavor VARCHAR(25), date DATE);");
 
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Vanilla', '2016-01-26');");
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Chocolate', '2016-02-26');");
-                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Strawberry', '2016-03-26');");
+                /**
+                 * To test out the success of Voting, enter your phone number
+                 * including the country code.
+                 */
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Vanilla Bean', '2016-01-26');");
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Coffee', '2016-02-26');");
+                stmt.executeUpdate("INSERT INTO tblVote VALUES('16107371722', 'Orange Swirl', '2016-03-26');");
 
                 con.close();
 
@@ -187,9 +191,9 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblVotableFlavors;");
                 stmt.executeUpdate("CREATE TABLE tblVotableFlavors(flavor VARCHAR(25), date DATE);");
 
-                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Vanilla', '2016-04-01');");
-                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Chocolate', '2016-04-01');");
-                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Strawberry', '2016-04-01');");
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Coffee', '2016-04-01');");
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Black Raspberry', '2016-04-01');");
+                stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Rocky Road', '2016-04-01');");
 
                 con.close();
 
@@ -228,7 +232,7 @@ public class DeveloperActivity extends DrawerActivity {
 
                 stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-20', 48.136954, 7.657983);");
                 stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-21', 48.130441, 7.653807);");
-                stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-27', 48.127872, 7.641587);");
+                stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-28', 48.127872, 7.641587);");
 
                 con.close();
 

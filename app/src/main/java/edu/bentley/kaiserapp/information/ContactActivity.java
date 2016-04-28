@@ -78,6 +78,10 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
         mMap = mapFragment.getMap();
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
+        /**
+         * Open up the Maps application with the queried LatLng
+         * provided in the method Uri.parse
+         */
         mMap.setOnMarkerClickListener(
                 new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(Marker m) {
@@ -91,6 +95,10 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
         );
     }
 
+    /**
+     * Return the LatLng of the ice cream truck
+     * for that current day
+     */
     public LatLng truckInfo() {
         LatLng toReturn = storeLatLng;
         try {
@@ -134,6 +142,9 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
         return toReturn;
     }
 
+    /**
+     * Make sure to update the WeatherWidget when it is created
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -205,10 +216,11 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             LatLngBounds bounds = builder.build();
             int padding = 80;
             cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        } else {
+            mMap.animateCamera(cu);
+        } else if (markers.size() == 1) {
             cu = CameraUpdateFactory.newLatLngZoom(markers.get(0).getPosition(), zoom);
+            mMap.animateCamera(cu);
         }
-        mMap.animateCamera(cu);
     }
 
     /**

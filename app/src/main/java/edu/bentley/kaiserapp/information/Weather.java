@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class Weather {
 
@@ -123,9 +124,15 @@ public class Weather {
                 toReturn =  "04"; break;
         }
 
-        Calendar c = Calendar.getInstance();
+        /**
+         * Appends the correct ending to the file based
+         * on the time of the German store.
+         */
+        TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
+        Calendar c = Calendar.getInstance(tz);
         int hour = c.get(Calendar.HOUR);
-        if (hour > 6 && hour < 19)
+        int daytime = c.get(Calendar.AM_PM);
+        if ((hour > 6 && daytime == 0) || (hour < 7 && daytime == 1))
             toReturn += "d.png";
         else
             toReturn += "n.png";
