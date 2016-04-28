@@ -72,8 +72,6 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
             flavorsList = new ArrayList<>();
         }
 
-        Thread t = new Thread(createList);
-        t.start();
 
         final ListView listView = (ListView)findViewById(android.R.id.list);
         adapter = new ArrayAdapter<>(this, R.layout.list_flavors, R.id.item_flavors, flavorsList);
@@ -142,45 +140,6 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
     }
 
     /**
-     * Sends the downloaded list to the handler where it will
-     * compare the new list to the list already shown to the
-     * user.
-     */
-    private Runnable createList = new Runnable() {
-        public void run(){try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
-            }
-
-            Statement stmt;
-            Connection con;
-            ArrayList<String> tempList = new ArrayList<>();
-            try {
-                con = DriverManager.getConnection (URL, USERNAME, PASSWORD);
-                stmt = con.createStatement();
-
-                ResultSet result = stmt.executeQuery(
-                        "SELECT flavor FROM tblFlavors ORDER BY flavor;");
-
-                while (result.next()) {
-                    String flavor = result.getString("flavor");
-                    tempList.add(flavor);
-                }
-
-                con.close();
-
-                Message msg = new Message();
-                msg.obj = tempList;
-                listHandler.sendMessage(msg);
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    /**
      * Checks to see if the list of ice cream
      * is current to the one in the database.
      */
@@ -215,6 +174,7 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
         flavorsList.clear();
         for (String e : list)
             flavorsList.add(e);
+        adapter.notifyDataSetChanged();
     }
 
     /**

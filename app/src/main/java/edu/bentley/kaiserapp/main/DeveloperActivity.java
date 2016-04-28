@@ -24,7 +24,7 @@ public class DeveloperActivity extends DrawerActivity {
 
     public final static String NAME = "developer";
 
-    private Button btnCreateFlavorsTable, btnCreateVotingTable, btnVotableFlavorsTable;
+    private Button btnCreateFlavorsTable, btnCreateVotingTable, btnVotableFlavorsTable, btnTruckTable;
 
     private Handler handler = new Handler() {
         public void handleMessage(Message message) {
@@ -67,6 +67,14 @@ public class DeveloperActivity extends DrawerActivity {
             @Override
             public void onClick(View v) {
                 (new Thread(createVotableFlavorsTable)).start();
+            }
+        });
+
+        btnTruckTable = (Button)findViewById(R.id.dev_create_truck_table);
+        btnTruckTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                (new Thread(createTruckTable)).start();
             }
         });
     }
@@ -187,6 +195,45 @@ public class DeveloperActivity extends DrawerActivity {
 
                 Message msg = new Message();
                 msg.obj = "Created tblVotableFlavors";
+                handler.sendMessage(msg);
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    /**
+     * Connect to the database and creates a
+     * table that has the location of the ice
+     * cream truck.
+     */
+    private Runnable createTruckTable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                Log.e("JDBC", "Did not load driver");
+            }
+
+            Statement stmt;
+            Connection con;
+            try {
+                con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                stmt = con.createStatement();
+
+                stmt.executeUpdate("DROP TABLE IF EXISTS tblTruck;");
+                stmt.executeUpdate("CREATE TABLE tblTruck(date DATE, lat VARCHAR(25), lng VARCHAR(25));");
+
+                stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-20', 48.136954, 7.657983);");
+                stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-21', 48.130441, 7.653807);");
+                stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-28', 48.127872, 7.641587);");
+
+                con.close();
+
+                Message msg = new Message();
+                msg.obj = "Created tblTruck";
                 handler.sendMessage(msg);
             }
             catch (SQLException e) {

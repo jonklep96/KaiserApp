@@ -14,6 +14,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -85,7 +89,11 @@ public class VotingActivity extends DrawerActivity {
          * select what flavor they want to see on the
          * menu next month.
          */
-        choiceList = new ArrayList<>();
+        try {
+            choiceList = readList();
+        } catch (IOException e) {
+            choiceList = new ArrayList<>();
+        }
         adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.choice_item, choiceList);
         listView = (ListView)findViewById(R.id.lv_voting);
         listView.setAdapter(adapter);
@@ -104,57 +112,34 @@ public class VotingActivity extends DrawerActivity {
                 pbVoting.setVisibility(View.VISIBLE);
             }
         });
-
-        (new Thread(createList)).start();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!isMultiThreading)
-            super.onBackPressed();
     }
 
     /**
-     * Connects to the database to see if there is a difference
-     * between the locally stored flavors and the ones
-     * on the database.
+     * Reads the list from the file if the data has already
+     * been accessed from the database before.
      */
-    private Runnable createList = new Runnable() {
-        @Override
-        public void run() {
-            isMultiThreading = true;
+    public ArrayList<String> readList() throws IOException {
+        ArrayList<String> toReturn = new ArrayList<>();
+        try {
+            InputStream in;
+
             try {
-                Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                Log.e("JDBC", "Did not load driver");
+                in = openFileInput("votingFlavors.txt");
+            } catch (IOException e) {
+                in = getResources().openRawResource(R.raw.flavors);
             }
 
-            Connection con;
-            try {
-                con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(isr);
+            String line;
 
-                PreparedStatement preStmt = con.prepareStatement("SELECT flavor FROM tblVotableFlavors " +
-                        "WHERE MONTH(date) = ? AND YEAR(date) = ?;");
-                preStmt.setInt(1, (new Date(Calendar.getInstance().getTimeInMillis())).getMonth()+1);
-                preStmt.setInt(2, (new Date(Calendar.getInstance().getTimeInMillis())).getYear()+1900);
-                ResultSet results = preStmt.executeQuery();
-                ArrayList<String> flavorList = new ArrayList<>();
-                while(results.next())
-                    flavorList.add(results.getString("flavor"));
-
-                con.close();
-
-                Message msg = new Message();
-                msg.obj = flavorList;
-                listHandler.sendMessage(msg);
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                isMultiThreading = false;
-            }
+            while ((line = reader.readLine()) != null) { toReturn.add(line); }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    };
+        return toReturn;
+    }
 
     /**
      * Handles the creation of the listView and
@@ -235,7 +220,7 @@ public class VotingActivity extends DrawerActivity {
                  * Display notification here
                  */
                 mNotifyDetails = new Notification.Builder(getApplicationContext())
-                        .setContentTitle("Unuccessful")    //set Notification text and icon
+                        .setContentTitle("Unsuccessful")    //set Notification text and icon
                         .setContentText("You have already voted this month")
                         .setSmallIcon(R.drawable.store_marker)
                         .setTicker("You have already voted")
