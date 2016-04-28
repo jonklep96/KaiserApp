@@ -1,7 +1,9 @@
 package edu.bentley.kaiserapp.main;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
@@ -64,7 +66,7 @@ public class VotingActivity extends DrawerActivity {
     /**
      * Gets updated when the program is threading
      */
-    private boolean isMultiThreading = false;
+    public final static int SIMPLE_NOTFICATION_ID = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,11 +223,16 @@ public class VotingActivity extends DrawerActivity {
                 /**
                  * Display notification here
                  */
+                final Intent notifyIntent = new Intent(getApplicationContext(), FlavorsActivity.class);
+                notifyIntent.putExtra("NotificationId", SIMPLE_NOTFICATION_ID);
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 mNotifyDetails = new Notification.Builder(getApplicationContext())
                         .setContentTitle("Unsuccessful")    //set Notification text and icon
                         .setContentText("You have already voted this month")
                         .setSmallIcon(R.drawable.store_marker)
                         .setTicker("You have already voted")
+                        .addAction(R.drawable.store_marker, "Unsuccessful", pendingIntent)
                         .setWhen(System.currentTimeMillis())
                         .setLights(Integer.MAX_VALUE,  500,  500)
                         .build();
@@ -285,11 +292,16 @@ public class VotingActivity extends DrawerActivity {
             /**
              * Display notification here
              */
+            final Intent notifyIntent = new Intent(getApplicationContext(), FlavorsActivity.class);
+            notifyIntent.putExtra("NotificationId", SIMPLE_NOTFICATION_ID);
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    getApplicationContext(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             mNotifyDetails = new Notification.Builder(getApplicationContext())
                     .setContentTitle("Successful")    //set Notification text and icon
                     .setContentText("You successfully voted for " + vote)
                     .setSmallIcon(R.drawable.store_marker)
                     .setTicker("You Voted")
+                    .addAction(R.drawable.store_marker, "Successful", pendingIntent)
                     .setWhen(System.currentTimeMillis())
                     .setLights(Integer.MAX_VALUE,  500,  500)
                     .build();
