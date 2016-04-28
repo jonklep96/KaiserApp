@@ -187,7 +187,7 @@ public class VotingActivity extends DrawerActivity {
                 Calendar c = Calendar.getInstance();
                 boolean flag = true;
                 while (result.next()) {
-                    Date date = result.getDate("vdate");
+                    Date date = result.getDate("date");
                     String num = result.getString("phone_number");
                     if ((date.getMonth() == c.get(Calendar.MONTH)) && (date.getYear() == (c.get(Calendar.YEAR)-1900))) {
                         flag = false;

@@ -29,30 +29,26 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
-
         <activity
             android:name=".animation.Animation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.DeveloperActivity" />
-        <activity android:name=".main.FlavorsActivity" />
-        <activity android:name=".information.ContactActivity" />
-        <activity android:name=".main.VotingActivity" />
         <activity android:name=".DrawerActivity" />
-
+        <activity android:name=".main.StartActivity" />
+        <activity android:name=".main.FlavorsActivity" />
+        <activity android:name=".main.VotingActivity" />
+        <activity android:name=".main.DeveloperActivity" />
+        <activity android:name=".information.ContactActivity" />
+        <activity android:name=".information.ScheduleActivity" />
         <receiver android:name=".DrawerActivity$ConnectionReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".information.ScheduleActivity" />
-        <activity android:name=".main.StartActivity"></activity>
     </application>
 
 </manifest>

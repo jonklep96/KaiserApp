@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Create the list that will be seen in the Navigation Drawer -->
     <group android:checkableBehavior="none">
-        <!--android:icon="@drawable/ic_menu_home" debug-->
         <item
             android:id="@+id/nav_start"
-            android:title="Start" />
-        <!--android:icon="@drawable/ic_menu_flavors" debug-->
+            android:title="Home" />
         <item
             android:id="@+id/nav_flavors"
-            android:title="Eiskarte" />
-        <!--android:icon="@drawable/ic_menu_voting" debug-->
+            android:title="Flavors" />
         <item
             android:id="@+id/nav_voting"
-            android:title="Wahl" />
-        <!--android:icon="@drawable/ic_menu_developer" debug-->
+            android:title="Vote" />
         <item
             android:id="@+id/nav_developer"
             android:title="Developer" />
     </group>
 
-    <item android:title="Informationen">
+    <item android:title="Information">
         <menu>
-            <!--android:icon="@drawable/ic_menu_map" debug-->
             <item
                 android:id="@+id/nav_map"
-                android:title="Stadtplan" />
-            <!--android:icon="@drawable/ic_menu_hours" debug-->
+                android:title="Map" />
             <item
                 android:id="@+id/nav_sched"
-                android:title="Geschäftszeiten" />
-            <!--android:icon="@drawable/ic_menu_phone" debug-->
-            <item
-                android:id="@+id/nav_contact"
-                android:title="Kontakt" />
+                android:title="Hours" />
         </menu>
     </item>
 

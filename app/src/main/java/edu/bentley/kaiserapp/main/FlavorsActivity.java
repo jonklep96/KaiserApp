@@ -131,50 +131,14 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
             BufferedReader reader = new BufferedReader(isr);
             String line;
 
-            while ((line = reader.readLine()) != null) { toReturn.add(line); }
+            while ((line = reader.readLine()) != null) {
+                toReturn.add(line);
+            }
             reader.close();
         } catch (IOException e) {
             Log.e(FLAVOR_TAG, "IOException: Cannot read flavors.txt");
         }
         return toReturn;
-    }
-
-    /**
-     * Checks to see if the list of ice cream
-     * is current to the one in the database.
-     */
-    private Handler listHandler = new Handler() {
-        public void handleMessage(Message message) {
-            ArrayList<String> tempList;
-            if (message.obj != null) {
-                tempList = (ArrayList<String>) message.obj;
-
-                boolean flag = true;
-                for (String e : flavorsList) {
-                    for (String s : tempList) {
-                        if (!e.equals(s)) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (!flag)
-                        break;
-                }
-
-                if (!flag)
-                    updateList(tempList);
-            }
-        }
-    };
-
-    /**
-     * Updates the list of ice cream if it is not current
-     */
-    public void updateList(ArrayList<String> list) {
-        flavorsList.clear();
-        for (String e : list)
-            flavorsList.add(e);
-        adapter.notifyDataSetChanged();
     }
 
     /**

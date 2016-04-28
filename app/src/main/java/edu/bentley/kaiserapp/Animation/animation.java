@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -24,8 +23,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import edu.bentley.kaiserapp.main.DeveloperActivity;
 import edu.bentley.kaiserapp.R;
+import edu.bentley.kaiserapp.main.StartActivity;
 
 public class Animation extends Activity {
 
@@ -37,10 +36,17 @@ public class Animation extends Activity {
     public final static String USERNAME = "jkleppinger";
     public final static String PASSWORD = "icecream";
 
-    private RelativeLayout layout;
+    /**
+     * Image that will be animated and the Thread that will
+     * control the timing of the animation.
+     */
     private ImageView image;
     Thread splashThread;
 
+    /**
+     * Instantiate the animation and its connection to
+     * the GUI
+     */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         Window window = getWindow();
@@ -54,7 +60,44 @@ public class Animation extends Activity {
         (new Thread (createList)).start();
         (new Thread (createVoteList)).start();
         (new Thread (createTruckList)).start();
-        StartAnimations();
+        startAnimations();
+    }
+
+    /**
+     * A method that begins the animation of the ice cream
+     * cone on the splash screen
+     */
+    private void startAnimations() {
+        image = (ImageView) findViewById(R.id.logo2);
+        image.setImageResource(R.drawable.largecone);
+        android.view.animation.Animation an = AnimationUtils.loadAnimation(this, R.anim.animate);
+        // Start the Animation
+        image.startAnimation(an);
+
+        // The Thread t ocontrol the timing of the animation
+        splashThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    int waited = 0;
+                    // Splash screen pause time
+                    while (waited < 6000) {
+                        sleep(100);
+                        waited += 100;
+                    }
+                    Intent intent = new Intent(Animation.this,
+                            StartActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    Animation.this.finish();
+                } catch (InterruptedException e) {
+                    // do nothing
+                } finally {
+                    Animation.this.finish();
+                }
+            }
+        };
+        splashThread.start();
     }
 
     /**
@@ -112,22 +155,6 @@ public class Animation extends Activity {
     };
 
     /**
-     * Saves the data from the list by writing each
-     * flavor from the list to a file.
-     */
-    private void saveList(ArrayList<String> temp, String fileName) {
-        try {
-            OutputStreamWriter output = new OutputStreamWriter(openFileOutput(fileName, MODE_PRIVATE));
-            for (String e : temp) {
-                output.write(e + "\n");
-            }
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Connects to the database to see if there is a difference
      * between the locally stored flavors and the ones
      * on the database.
@@ -146,7 +173,7 @@ public class Animation extends Activity {
                 con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
                 PreparedStatement preStmt = con.prepareStatement("SELECT flavor FROM tblVotableFlavors " +
-                        "WHERE MONTH(vdate) = ? AND YEAR(vdate) = ?;");
+                        "WHERE MONTH(date) = ? AND YEAR(date) = ?;");
                 preStmt.setInt(1, (new Date(Calendar.getInstance().getTimeInMillis())).getMonth()+1);
                 preStmt.setInt(2, (new Date(Calendar.getInstance().getTimeInMillis())).getYear()+1900);
                 ResultSet results = preStmt.executeQuery();
@@ -201,12 +228,12 @@ public class Animation extends Activity {
                 stmt = con.createStatement();
 
                 ResultSet result = stmt.executeQuery(
-                        "SELECT tdate, lng, lat FROM tblTruck ORDER BY tdate DESC LIMIT 1;");
+                        "SELECT date, lng, lat FROM tblTruck ORDER BY date DESC LIMIT 1;");
 
                 result.next();
-                String yr = String.valueOf(result.getDate("tdate").getYear()+1900);
-                String mth = String.valueOf(result.getDate("tdate").getMonth()+1);
-                String dy = String.valueOf(result.getDate("tdate").getDate());
+                String yr = String.valueOf(result.getDate("date").getYear()+1900);
+                String mth = String.valueOf(result.getDate("date").getMonth()+1);
+                String dy = String.valueOf(result.getDate("date").getDate());
 
                 tempList.add(yr + "-" + mth + "-" + dy);
                 tempList.add(result.getString("lat"));
@@ -238,37 +265,20 @@ public class Animation extends Activity {
         }
     };
 
-
-
-    private void StartAnimations() {
-        image = (ImageView) findViewById(R.id.logo2);
-        image.setImageResource(R.drawable.largecone);
-        android.view.animation.Animation an = AnimationUtils.loadAnimation(this, R.anim.animate);
-        // Start the Animation
-        image.startAnimation(an);
-
-        splashThread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    int waited = 0;
-                    // Splash screen pause time
-                    while (waited < 6000) {
-                        sleep(100);
-                        waited += 100;
-                    }
-                    Intent intent = new Intent(Animation.this,
-                            DeveloperActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    Animation.this.finish();
-                } catch (InterruptedException e) {
-                    // do nothing
-                } finally {
-                    Animation.this.finish();
-                }
+    /**
+     * Saves the data from the list by writing each
+     * flavor from the list to a file.
+     */
+    private void saveList(ArrayList<String> temp, String fileName) {
+        try {
+            OutputStreamWriter output = new OutputStreamWriter(openFileOutput(fileName, MODE_PRIVATE));
+            output.write("");
+            for (String e : temp) {
+                output.append(e + "\n");
             }
-        };
-        splashThread.start();
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

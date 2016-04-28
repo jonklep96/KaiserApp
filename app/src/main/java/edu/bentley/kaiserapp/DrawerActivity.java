@@ -124,6 +124,10 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         getIsConnected(this);
     }
 
+    /**
+     * Overrides the back pressing mechanism so
+     * the drawer will be closed rather than going back a page
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -134,8 +138,15 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    /**
+     * Allow the user to contact the store through a phone
+     * number, or the user can email the store. The user
+     * just has to click the phone number or email.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+
         TextView header_phone = (TextView)findViewById(R.id.header_phone);
         header_phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +166,18 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_call:
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.phone_number))));
+                break;
+            default:
+                super.onContextItemSelected(item);
+        }
         return true;
     }
 
@@ -190,7 +213,6 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case R.id.nav_sched:
                 startActivity(new Intent(this, ScheduleActivity.class));
                 break;
-            case R.id.nav_contact: break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -240,7 +262,7 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
                 sb.dismiss();
         } else {
             isConnected = false;
-            sb = Snackbar.make(vf, "\t\t\t\t\tOffline", Snackbar.LENGTH_INDEFINITE);
+            sb = Snackbar.make(vf, "Offline", Snackbar.LENGTH_INDEFINITE);
             sb.show();
         }
     }
