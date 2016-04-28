@@ -38,4 +38,7 @@
     <!-- Option Menu List -->
     <string name="action_call">Call</string>
     <string name="action_back">Go Back</string>
+
+    <!-- Voting Activity -->
+    <string name="vote_here">Place your vote for the ice cream you would like to see arrive next month.</string>
 </resources>

@@ -6,7 +6,7 @@
     android:fitsSystemWindows="true"
     android:id="@+id/layout_animation"
     android:background="@color/colorAccent"
-    tools:context=".animation.Animation">
+    tools:context=".Animation">
 
     <ImageView
         android:id="@+id/logo2"

@@ -21,4 +21,16 @@
         android:layout_height="@dimen/pb_voting_width_and_height"
         android:layout_centerInParent="true"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:text="@string/vote_here"
+        android:gravity="center"
+        android:textSize="@dimen/vote_here_textsize"
+        android:textColor="@color/flavor_item_text"
+        android:layout_marginTop="@dimen/vote_here_margin_top"
+        android:layout_marginBottom="@dimen/vote_here_margin_bottom" />
+
 </RelativeLayout>

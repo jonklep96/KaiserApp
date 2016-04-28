@@ -1,4 +1,4 @@
-package edu.bentley.kaiserapp.animation;
+package edu.bentley.kaiserapp;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,8 +22,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import edu.bentley.kaiserapp.R;
 import edu.bentley.kaiserapp.information.ContactActivity;
 import edu.bentley.kaiserapp.main.FlavorsActivity;
 import edu.bentley.kaiserapp.main.StartActivity;
