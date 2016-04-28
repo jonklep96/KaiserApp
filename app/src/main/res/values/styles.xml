@@ -23,22 +23,18 @@
 
     <style name="Schedule_Left" parent="AppTheme">
         <item name="android:background">@color/contact_schedule</item>
-        <item name="android:layout_marginTop">@dimen/tv_schedule_margin_top</item>
-        <item name="android:layout_marginStart">@dimen/tv_schedule_margin_side</item>
-        <item name="android:layout_marginLeft">@dimen/tv_schedule_margin_side</item>
         <item name="android:gravity">left</item>
-        <item name="android:lineSpacingExtra">5dp</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:lineSpacingExtra">@dimen/sched_linespace</item>
+        <item name="android:textSize">@dimen/sched_textsize</item>
     </style>
 
-    <style name="Schedule_Right" parent="AppTheme">
-        <item name="android:background">@color/contact_schedule</item>
-        <item name="android:layout_marginTop">@dimen/tv_schedule_margin_top</item>
-        <item name="android:layout_marginEnd">@dimen/tv_schedule_margin_side</item>
-        <item name="android:layout_marginRight">@dimen/tv_schedule_margin_side</item>
+    <style name="Schedule_Right" parent="Schedule_Left">
         <item name="android:gravity">right</item>
-        <item name="android:lineSpacingExtra">5dp</item>
-        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="ScheduleButton" parent="AppTheme">
+        <item name="android:layout_margin">@dimen/sched_btn_margin</item>
+        <item name="android:layout_marginTop">@dimen/sched_btn_margin_top</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

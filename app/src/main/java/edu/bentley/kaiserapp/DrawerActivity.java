@@ -175,6 +175,8 @@ public class DrawerActivity extends AppCompatActivity implements NavigationView.
             case R.id.action_call:
                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+getResources().getString(R.string.phone_number))));
                 break;
+            case R.id.action_back:
+                super.onBackPressed();
             default:
                 super.onContextItemSelected(item);
         }

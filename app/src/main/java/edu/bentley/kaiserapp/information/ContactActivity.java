@@ -51,6 +51,8 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
 
     private String WEATHER_KEY;
 
+    public final static String FILE_NAME = "truck.txt";
+
     /**
      * Variables to store the location of the store.
      * This will be used to find the store in Google Maps
@@ -95,7 +97,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             InputStream in;
 
             try {
-                in = openFileInput("truck.txt");
+                in = openFileInput(FILE_NAME);
             } catch (IOException e) {
                 in = getResources().openRawResource(R.raw.truck);
                 e.printStackTrace();
@@ -198,9 +200,14 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
         for (MarkerOptions marker : markers) {
             builder.include(marker.getPosition());
         }
-        LatLngBounds bounds = builder.build();
-        int padding = 80;
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        CameraUpdate cu;
+        if (markers.size() > 1) {
+            LatLngBounds bounds = builder.build();
+            int padding = 80;
+            cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        } else {
+            cu = CameraUpdateFactory.newLatLngZoom(markers.get(0).getPosition(), zoom);
+        }
         mMap.animateCamera(cu);
     }
 

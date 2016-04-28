@@ -54,7 +54,7 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
      * The text file that will store the flavors
      * that are downloaded from Frodo.
      */
-    private final static String FILE_NAME = "user_flavors.txt";
+    public final static String FILE_NAME = "user_flavors.txt";
 
     private TextToSpeech speaker;
 
@@ -124,7 +124,7 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
                 in = openFileInput(FILE_NAME);
             } catch (IOException e) {
                 Log.d(FLAVOR_TAG, "IOException: user_flavors.txt does not exist");
-                in = getResources().openRawResource(R.raw.flavors);
+                in = getResources().openRawResource(R.raw.user_flavors);
             }
 
             InputStreamReader isr = new InputStreamReader(in);
@@ -136,7 +136,7 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
             }
             reader.close();
         } catch (IOException e) {
-            Log.e(FLAVOR_TAG, "IOException: Cannot read flavors.txt");
+            Log.e(FLAVOR_TAG, "IOException: Cannot read user_flavors.txt");
         }
         return toReturn;
     }

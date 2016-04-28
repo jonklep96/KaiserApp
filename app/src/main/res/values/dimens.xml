@@ -18,8 +18,6 @@
 
     <!-- Address in ContactActivity -->
     <dimen name="store_address_textsize">18sp</dimen>
-    <dimen name="tv_schedule_margin_top">30dp</dimen>
-    <dimen name="tv_schedule_margin_side">20dp</dimen>
 
     <!-- Voting Activity Values -->
     <dimen name="tv_voting_textsize">30sp</dimen>
@@ -30,9 +28,14 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">120dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
     <!-- Dimensinos for Start Activity -->
     <dimen name="title_textsize">38sp</dimen>
     <dimen name="start_pic_margin_top">45dp</dimen>
+
+    <!-- Schedule Activity Dimensions -->
+    <dimen name="sched_linespace">8dp</dimen>
+    <dimen name="sched_textsize">26dp</dimen>
+    <dimen name="sched_btn_margin">8dp</dimen>
+    <dimen name="sched_btn_margin_top">25dp</dimen>
 </resources>

@@ -39,6 +39,7 @@ public class VotingActivity extends DrawerActivity {
     private static final String VOTING_TAG = "VotingActivity";
 
     public final static String NAME = "voting";
+    public final static String FILE_NAME = "voting_flavors.txt";
 
     /**
      * The user's phone number and the flavor
@@ -125,7 +126,7 @@ public class VotingActivity extends DrawerActivity {
             InputStream in;
 
             try {
-                in = openFileInput("voting_flavors.txt");
+                in = openFileInput(FILE_NAME);
             } catch (IOException e) {
                 in = getResources().openRawResource(R.raw.voting_flavors);
             }

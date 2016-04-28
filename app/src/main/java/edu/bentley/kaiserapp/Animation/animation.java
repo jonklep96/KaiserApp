@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import edu.bentley.kaiserapp.R;
+import edu.bentley.kaiserapp.information.ContactActivity;
+import edu.bentley.kaiserapp.main.FlavorsActivity;
 import edu.bentley.kaiserapp.main.StartActivity;
+import edu.bentley.kaiserapp.main.VotingActivity;
 
 public class Animation extends Activity {
 
@@ -149,7 +152,7 @@ public class Animation extends Activity {
             ArrayList<String> tempList;
             if (message.obj != null) {
                 tempList = (ArrayList<String>) message.obj;
-                saveList(tempList, "flavors.txt");
+                saveList(tempList, FlavorsActivity.FILE_NAME);
             }
         }
     };
@@ -202,7 +205,7 @@ public class Animation extends Activity {
                 ArrayList<String> tempList;
                 if (message.obj != null) {
                     tempList = (ArrayList<String>) message.obj;
-                    saveList(tempList, "voting_flavors.txt");
+                    saveList(tempList, VotingActivity.FILE_NAME);
                 }
             }
         };
@@ -260,7 +263,7 @@ public class Animation extends Activity {
             ArrayList<String> tempList;
             if (message.obj != null) {
                 tempList = (ArrayList<String>) message.obj;
-                saveList(tempList, "truck.txt");
+                saveList(tempList, ContactActivity.FILE_NAME);
             }
         }
     };

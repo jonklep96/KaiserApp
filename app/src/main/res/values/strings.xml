@@ -4,7 +4,7 @@
     <string name="store_address">79346 Endingen-Königschaffhausen\nUntere Guldenstr. 10</string>
     <string name="url_address">http://www.kaiserstuehlerlandeis.de/index.php/index.html</string>
 
-    <!-- Contact Activity Text -->
+    <!-- Schedule Activity Text -->
     <string-array name="schedule_days">
         <item name="g_monday">Monday</item>
         <item name="g_tuesday">Tuesday</item>
@@ -23,6 +23,7 @@
         <item name="g_saturday">11AM - 10PM</item>
         <item name="g_sunday">11AM - 10PM</item>
     </string-array>
+    <string name="btn_map">Visit our Location</string>
 
     <!-- Loading Screen -->
     <string name="loading">Loading&#8230;</string>
@@ -36,4 +37,5 @@
 
     <!-- Option Menu List -->
     <string name="action_call">Call</string>
+    <string name="action_back">Go Back</string>
 </resources>
