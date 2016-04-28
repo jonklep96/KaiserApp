@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import edu.bentley.kaiserapp.R;
@@ -54,6 +58,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
     private final float zoom = 16.0f;
     private final String CITY = "ENDINGEN";
     private final String STATE = "DE";
+    private LatLng truckLatLng;
 
     private Handler weatherHandler;
 
@@ -79,6 +84,49 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                     }
                 }
         );
+    }
+
+    public LatLng truckInfo() {
+        LatLng toReturn = storeLatLng;
+        try {
+            InputStream in;
+
+            try {
+                in = openFileInput("truck.txt");
+            } catch (IOException e) {
+                in = getResources().openRawResource(R.raw.truck);
+                e.printStackTrace();
+            }
+
+            InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader reader = new BufferedReader(isr);
+            double lat = storeLatLng.latitude;
+            double lng = storeLatLng.longitude;
+
+            for (int i = 0; i < 3; i++) {
+                 if(i == 0){
+                     String date = reader.readLine();
+                     String today = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                     today += "-" + String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1);
+                     today += "-" + String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                     if(!date.equals(today)){
+                         return toReturn;
+                     }
+                 }
+                if(i == 1){
+                    lat = Double.parseDouble(reader.readLine());
+                }
+                if(i == 2){
+                    lng = Double.parseDouble(reader.readLine());
+                }
+            }
+            toReturn = new LatLng(lat, lng);
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return toReturn;
     }
 
     @Override
@@ -124,6 +172,14 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                         .position(storeLatLng)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.store_marker)
                         ));
+                truckLatLng = truckInfo();
+                if(!truckLatLng.equals(storeLatLng)){
+                    mMap.addMarker(new MarkerOptions()
+                            .title("Ice Cream Truck")
+                            .position(truckLatLng)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ice_cream_truck)
+                            ));
+                }
             }
 
         } catch (IOException e) {

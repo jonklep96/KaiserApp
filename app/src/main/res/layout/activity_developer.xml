@@ -25,4 +25,9 @@
         android:layout_height="wrap_content"
         android:text="Create Votable Flavors Table" />
 
+    <Button android:id="@+id/dev_create_truck_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Truck Table" />
+
 </LinearLayout>
