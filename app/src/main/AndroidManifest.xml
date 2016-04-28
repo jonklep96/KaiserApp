@@ -51,7 +51,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".information.ScheduleActivity"></activity>
+        <activity android:name=".information.ScheduleActivity" />
+        <activity android:name=".main.StartActivity"></activity>
     </application>
 
 </manifest>

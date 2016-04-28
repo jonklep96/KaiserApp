@@ -1,4 +1,4 @@
-package edu.bentley.kaiserapp.Animation;
+package edu.bentley.kaiserapp.animation;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -146,7 +146,7 @@ public class Animation extends Activity {
                 con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
                 PreparedStatement preStmt = con.prepareStatement("SELECT flavor FROM tblVotableFlavors " +
-                        "WHERE MONTH(date) = ? AND YEAR(date) = ?;");
+                        "WHERE MONTH(vdate) = ? AND YEAR(vdate) = ?;");
                 preStmt.setInt(1, (new Date(Calendar.getInstance().getTimeInMillis())).getMonth()+1);
                 preStmt.setInt(2, (new Date(Calendar.getInstance().getTimeInMillis())).getYear()+1900);
                 ResultSet results = preStmt.executeQuery();
@@ -175,7 +175,7 @@ public class Animation extends Activity {
                 ArrayList<String> tempList;
                 if (message.obj != null) {
                     tempList = (ArrayList<String>) message.obj;
-                    saveList(tempList, "votingFlavors.txt");
+                    saveList(tempList, "voting_flavors.txt");
                 }
             }
         };
@@ -201,11 +201,16 @@ public class Animation extends Activity {
                 stmt = con.createStatement();
 
                 ResultSet result = stmt.executeQuery(
-                        "SELECT date, long, lat FROM tblTruck WHERE date = MAX(date);");
+                        "SELECT tdate, lng, lat FROM tblTruck ORDER BY tdate DESC LIMIT 1;");
 
-                tempList.add(result.getDate("date").toString());
-                tempList.add(result.getString("long"));
+                result.next();
+                String yr = String.valueOf(result.getDate("tdate").getYear()+1900);
+                String mth = String.valueOf(result.getDate("tdate").getMonth()+1);
+                String dy = String.valueOf(result.getDate("tdate").getDate());
+
+                tempList.add(yr + "-" + mth + "-" + dy);
                 tempList.add(result.getString("lat"));
+                tempList.add(result.getString("lng"));
 
                 con.close();
 

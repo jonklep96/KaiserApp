@@ -83,6 +83,7 @@ public class VotingActivity extends DrawerActivity {
         phoneNumber = phoneManager.getLine1Number();
 
         pbVoting = (ProgressBar)findViewById(R.id.pb_voting);
+        pbVoting.setVisibility(View.INVISIBLE);
 
         /**
          * Build the ListView object to help the user
@@ -124,9 +125,9 @@ public class VotingActivity extends DrawerActivity {
             InputStream in;
 
             try {
-                in = openFileInput("votingFlavors.txt");
+                in = openFileInput("voting_flavors.txt");
             } catch (IOException e) {
-                in = getResources().openRawResource(R.raw.flavors);
+                in = getResources().openRawResource(R.raw.voting_flavors);
             }
 
             InputStreamReader isr = new InputStreamReader(in);
@@ -186,7 +187,7 @@ public class VotingActivity extends DrawerActivity {
                 Calendar c = Calendar.getInstance();
                 boolean flag = true;
                 while (result.next()) {
-                    Date date = result.getDate("date");
+                    Date date = result.getDate("vdate");
                     String num = result.getString("phone_number");
                     if ((date.getMonth() == c.get(Calendar.MONTH)) && (date.getYear() == (c.get(Calendar.YEAR)-1900))) {
                         flag = false;

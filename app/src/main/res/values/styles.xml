@@ -15,6 +15,13 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="AppTitle" parent="AppTheme">
+        <item name="android:textSize">@dimen/title_textsize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/flavor_item_text</item>
+        <item name="android:fontFamily"></item>
+    </style>
+
     <style name="Schedule_Left" parent="AppTheme">
         <item name="android:background">@color/contact_schedule</item>
         <item name="android:layout_marginTop">@dimen/tv_schedule_margin_top</item>

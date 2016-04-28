@@ -185,7 +185,7 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt = con.createStatement();
 
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblVotableFlavors;");
-                stmt.executeUpdate("CREATE TABLE tblVotableFlavors(flavor VARCHAR(25), date DATE);");
+                stmt.executeUpdate("CREATE TABLE tblVotableFlavors(flavor VARCHAR(25), vdate DATE);");
 
                 stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Vanilla', '2016-04-01');");
                 stmt.executeUpdate("INSERT INTO tblVotableFlavors VALUES('Chocolate', '2016-04-01');");
@@ -224,7 +224,7 @@ public class DeveloperActivity extends DrawerActivity {
                 stmt = con.createStatement();
 
                 stmt.executeUpdate("DROP TABLE IF EXISTS tblTruck;");
-                stmt.executeUpdate("CREATE TABLE tblTruck(date DATE, lat VARCHAR(25), lng VARCHAR(25));");
+                stmt.executeUpdate("CREATE TABLE tblTruck(tdate DATE, lat VARCHAR(25), lng VARCHAR(25));");
 
                 stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-20', 48.136954, 7.657983);");
                 stmt.executeUpdate("INSERT INTO tblTruck VALUES('2016-04-21', 48.130441, 7.653807);");

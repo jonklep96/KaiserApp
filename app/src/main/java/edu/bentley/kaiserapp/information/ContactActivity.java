@@ -15,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -45,6 +47,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
     public final static String NAME = "map";
 
     private GoogleMap mMap;
+    private ArrayList<MarkerOptions> markers = new ArrayList<>();
 
     private String WEATHER_KEY;
 
@@ -76,7 +79,7 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.setOnMarkerClickListener(
                 new GoogleMap.OnMarkerClickListener() {
                     public boolean onMarkerClick(Marker m) {
-                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(STORE_ADDRESS)));
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q="+m.getPosition().latitude+","+m.getPosition().longitude));
                         if (i.resolveActivity(getPackageManager()) != null) {
                             startActivity(i);
                         }
@@ -167,18 +170,22 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
                 double lat = a.getLatitude();
                 double lng = a.getLongitude();
                 storeLatLng = new LatLng(lat, lng);
-                mMap.addMarker(new MarkerOptions()
+                MarkerOptions storeMarker = new MarkerOptions()
                         .title(STORE_ADDRESS)
                         .position(storeLatLng)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.store_marker)
-                        ));
+                        );
+                mMap.addMarker(storeMarker);
+                markers.add(storeMarker);
                 truckLatLng = truckInfo();
                 if(!truckLatLng.equals(storeLatLng)){
-                    mMap.addMarker(new MarkerOptions()
+                    MarkerOptions truckMarker = new MarkerOptions()
                             .title("Ice Cream Truck")
                             .position(truckLatLng)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ice_cream_truck)
-                            ));
+                            );
+                    mMap.addMarker(truckMarker);
+                    markers.add(truckMarker);
                 }
             }
 
@@ -186,9 +193,15 @@ public class ContactActivity extends FragmentActivity implements OnMapReadyCallb
             e.printStackTrace();
         }
 
-        // Move the camera to the location of the store
-        if(storeLatLng != null)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(storeLatLng, zoom));
+        // Move the camera to show both Markers
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (MarkerOptions marker : markers) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 80;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
     }
 
     /**

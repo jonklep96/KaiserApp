@@ -9,22 +9,22 @@
 
     <!-- Contact Activity Text -->
     <string-array name="schedule_days">
-        <item name="g_monday">Montag</item>
-        <item name="g_tuesday">Dienstag</item>
-        <item name="g_wednesday">Mittwoch</item>
-        <item name="g_thursday">Donnerstag</item>
-        <item name="g_friday">Freitag</item>
-        <item name="g_saturday">Samstag</item>
-        <item name="g_sunday">Sonntag</item>
+        <item name="g_monday">Monday</item>
+        <item name="g_tuesday">Tuesday</item>
+        <item name="g_wednesday">Wednesdya</item>
+        <item name="g_thursday">Thursday</item>
+        <item name="g_friday">Friday</item>
+        <item name="g_saturday">Saturday</item>
+        <item name="g_sunday">Sunday</item>
     </string-array>
     <string-array name="schedule_times">
-        <item name="g_monday">11h-22h</item>
-        <item name="g_tuesday">11h-22h</item>
-        <item name="g_wednesday">14h-18h</item>
-        <item name="g_thursday">11h-22h</item>
-        <item name="g_friday">11h-22h</item>
-        <item name="g_saturday">11h-22h</item>
-        <item name="g_sunday">11h-22h</item>
+        <item name="g_monday">11AM - 10PM</item>
+        <item name="g_tuesday">11AM - 10PM</item>
+        <item name="g_wednesday">2PM - 6PM</item>
+        <item name="g_thursday">11AM - 10PM</item>
+        <item name="g_friday">11AM - 10PM</item>
+        <item name="g_saturday">11AM - 10PM</item>
+        <item name="g_sunday">11AM - 10PM</item>
     </string-array>
 
     <!-- Loading Screen -->
