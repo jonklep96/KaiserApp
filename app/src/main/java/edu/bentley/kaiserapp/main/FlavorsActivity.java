@@ -215,6 +215,7 @@ public class FlavorsActivity extends DrawerActivity implements TextToSpeech.OnIn
         flavorsList.clear();
         for (String e : list)
             flavorsList.add(e);
+        adapter.notifyDataSetChanged();
     }
 
     /**

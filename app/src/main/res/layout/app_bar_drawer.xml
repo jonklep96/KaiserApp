@@ -33,7 +33,6 @@
         <include android:id="@+id/include_developer" layout="@layout/activity_developer" />
         <include android:id="@+id/include_map" layout="@layout/activity_contact" />
         <include android:id="@+id/include_sched" layout="@layout/activity_schedule" />
-        <!--<include android:id="@+id/include_contact" layout="@layout/activity_developer" /> debug-->
     </ViewFlipper>
 
 </android.support.design.widget.CoordinatorLayout>
